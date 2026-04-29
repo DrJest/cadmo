@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laboratorio Modulo 2 - ITS LinuxLab</title>
+  <title>Missioni Lampo - ITS LinuxLab</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -21,6 +21,10 @@
 
     .delay-200 {
       animation-delay: 200ms;
+    }
+
+    .delay-300 {
+      animation-delay: 300ms;
     }
 
     @keyframes fadeIn {
@@ -52,21 +56,16 @@
       background: #4B5563;
     }
 
-    /* Stili per il Quiz */
-    .quiz-option {
-      @apply flex items-center p-4 border border-gray-700 rounded-lg cursor-pointer bg-gray-800/50 hover:bg-gray-800 transition-colors mb-3;
+    .solution-container {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+      opacity: 0;
     }
 
-    .quiz-option.selected {
-      @apply border-blue-500 bg-blue-900/20 ring-1 ring-blue-500;
-    }
-
-    .quiz-option.correct {
-      @apply border-green-500 bg-green-900/20 ring-1 ring-green-500;
-    }
-
-    .quiz-option.wrong {
-      @apply border-red-500 bg-red-900/20 ring-1 ring-red-500 opacity-70;
+    .solution-container.open {
+      max-height: 200px;
+      opacity: 1;
     }
   </style>
 </head>
@@ -82,7 +81,7 @@
           <span class="font-bold text-xl tracking-tight">ITS <span class="text-green-500">LinuxLab</span></span>
         </div>
         <div class="flex items-center gap-4">
-          <a href="./"
+          <a href="homepage.html"
             class="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-2">
             <i data-lucide="arrow-left" class="w-4 h-4"></i> Torna alla Home
           </a>
@@ -95,311 +94,253 @@
   <header class="bg-gray-950 border-b border-gray-800 py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
       <div
-        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/30 border border-blue-500/30 text-xs text-blue-400 font-mono mb-4 uppercase tracking-wider">
-        <i data-lucide="flask-conical" class="w-4 h-4"></i> Laboratorio Pratico
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-900/30 border border-red-500/30 text-xs text-red-400 font-mono mb-4 uppercase tracking-wider">
+        <i data-lucide="zap" class="w-4 h-4 text-red-500"></i> Hardcore Mode
       </div>
-      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Esercitazioni Modulo 2</h1>
-      <p class="text-gray-400 text-lg">Guida di riferimento, missioni pratiche da svolgere sul terminale e quiz di
-        verifica finale.</p>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Missioni Lampo</h1>
+      <p class="text-gray-400 text-lg">Regola d'oro: Divieto assoluto di copia-incolla e divieto di usare il tasto
+        backspace. Se sbagli a digitare, interrompi (<kbd class="bg-gray-800 px-1 rounded">Ctrl+C</kbd>) e riscrivi da
+        capo!</p>
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
 
-    <!-- PARTE 1: GUIDA SCENARI -->
-    <section class="animate-fade-in delay-100">
-      <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
-        <i data-lucide="book-open" class="w-6 h-6 text-blue-400"></i>
-        <h2 class="text-2xl font-bold text-white">1. Guida agli Scenari Comuni</h2>
+    <!-- Missione 1 -->
+    <article
+      class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 md:p-8 animate-fade-in delay-100">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-lg bg-blue-900/50 flex items-center justify-center border border-blue-500/30">
+          <i data-lucide="folder-tree" class="w-5 h-5 text-blue-400"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-white">Missione 1: La Matrioska</h2>
+          <p class="text-sm text-blue-400 font-mono">Focus: Navigazione e percorsi</p>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700">
-          <h3 class="text-lg font-bold text-blue-400 mb-2">Scenario: Nuovo Progetto</h3>
-          <p class="text-gray-400 text-sm mb-3">Devi creare una struttura di cartelle e file di partenza.</p>
-          <div class="font-mono text-sm bg-gray-900 p-3 rounded border border-gray-700 text-gray-300">
-            <span class="text-green-500">$</span> mkdir progetto_web<br>
-            <span class="text-green-500">$</span> cd progetto_web<br>
-            <span class="text-green-500">$</span> touch index.html style.css
-          </div>
-        </div>
+      <div class="text-gray-300 space-y-2 mb-6 ml-2">
+        <p>1. Partendo dalla tua home, crea tre cartelle annidate: <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">livello1</code>, entraci, crea <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">livello2</code>, entraci, crea <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">livello3</code>, entraci.</p>
+        <p>2. Controlla il tuo percorso per verificare di essere dentro <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">livello3</code>.</p>
+        <p>3. Crea un file vuoto chiamato <code class="text-gray-400 bg-gray-900 px-1 rounded">tesoro.txt</code>.</p>
+        <p>4. Con <strong>un solo comando</strong>, torna a <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">livello1</code> (usando un percorso relativo).</p>
+      </div>
 
-        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700">
-          <h3 class="text-lg font-bold text-yellow-400 mb-2">Scenario: Ristrutturazione</h3>
-          <p class="text-gray-400 text-sm mb-3">Devi spostare o rinominare file esistenti.</p>
-          <div class="font-mono text-sm bg-gray-900 p-3 rounded border border-gray-700 text-gray-300">
-            <span class="text-gray-500"># Rinomina file</span><br>
-            <span class="text-green-500">$</span> mv vecchio.txt nuovo.txt<br>
-            <span class="text-gray-500"># Sposta in cartella padre</span><br>
-            <span class="text-green-500">$</span> mv file.txt ..
-          </div>
-        </div>
+      <button onclick="toggleSolution('sol-1')"
+        class="text-sm flex items-center gap-2 text-gray-400 hover:text-white transition-colors bg-gray-900 px-4 py-2 rounded-lg border border-gray-700">
+        <i data-lucide="eye" class="w-4 h-4"></i> Rivela Soluzione
+      </button>
 
+      <div id="sol-1" class="solution-container mt-4">
+        <div class="bg-gray-950 p-4 rounded-xl border border-green-900/50 font-mono text-sm text-gray-300">
+          <span class="text-green-500">$</span> mkdir livello1<br>
+          <span class="text-green-500">$</span> cd livello1<br>
+          <span class="text-green-500">$</span> mkdir livello2<br>
+          <span class="text-green-500">$</span> cd livello2<br>
+          <span class="text-green-500">$</span> mkdir livello3<br>
+          <span class="text-green-500">$</span> cd livello3<br>
+          <span class="text-green-500">$</span> pwd <span class="text-gray-600"># Deve restituire
+            .../livello1/livello2/livello3</span><br>
+          <span class="text-green-500">$</span> touch tesoro.txt<br>
+          <span class="text-green-500">$</span> cd ../..
+        </div>
+      </div>
+    </article>
+
+    <!-- Missione 2 -->
+    <article
+      class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 md:p-8 animate-fade-in delay-200">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-lg bg-yellow-900/50 flex items-center justify-center border border-yellow-500/30">
+          <i data-lucide="move" class="w-5 h-5 text-yellow-400"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-white">Missione 2: Lo Stagista Disordinato</h2>
+          <p class="text-sm text-yellow-400 font-mono">Focus: Spostare e Rinominare multipli</p>
+        </div>
+      </div>
+
+      <div class="text-gray-300 space-y-2 mb-6 ml-2">
+        <p>1. Nella tua home, crea questi 5 file insieme: <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">img1.jpg</code>, <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">img2.jpg</code>, <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">testo.txt</code>, <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">appunti.txt</code>, <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">canzone.mp3</code>.</p>
+        <p>2. Crea due cartelle: <code class="text-gray-400 bg-gray-900 px-1 rounded">Immagini</code> e <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">Documenti</code>.</p>
+        <p>3. Sposta le due immagini nella cartella Immagini in un colpo solo.</p>
+        <p>4. Sposta i due file di testo nella cartella Documenti.</p>
+        <p>5. Rinomina il file <code class="text-gray-400 bg-gray-900 px-1 rounded">canzone.mp3</code> in <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">rumore.mp3</code>.</p>
+      </div>
+
+      <button onclick="toggleSolution('sol-2')"
+        class="text-sm flex items-center gap-2 text-gray-400 hover:text-white transition-colors bg-gray-900 px-4 py-2 rounded-lg border border-gray-700">
+        <i data-lucide="eye" class="w-4 h-4"></i> Rivela Soluzione
+      </button>
+
+      <div id="sol-2" class="solution-container mt-4">
+        <div class="bg-gray-950 p-4 rounded-xl border border-green-900/50 font-mono text-sm text-gray-300">
+          <span class="text-green-500">$</span> cd ~<br>
+          <span class="text-green-500">$</span> touch img1.jpg img2.jpg testo.txt appunti.txt canzone.mp3<br>
+          <span class="text-green-500">$</span> mkdir Immagini Documenti<br>
+          <span class="text-green-500">$</span> mv img1.jpg img2.jpg Immagini/<br>
+          <span class="text-green-500">$</span> mv testo.txt appunti.txt Documenti/<br>
+          <span class="text-green-500">$</span> mv canzone.mp3 rumore.mp3
+        </div>
+      </div>
+    </article>
+
+    <!-- Missione 3 -->
+    <article
+      class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 md:p-8 animate-fade-in delay-200">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-lg bg-purple-900/50 flex items-center justify-center border border-purple-500/30">
+          <i data-lucide="copy" class="w-5 h-5 text-purple-400"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-white">Missione 3: Paranoia Backup</h2>
+          <p class="text-sm text-purple-400 font-mono">Focus: Copie ricorsive</p>
+        </div>
+      </div>
+
+      <div class="text-gray-300 space-y-2 mb-6 ml-2">
+        <p>1. Crea una cartella chiamata <code class="text-gray-400 bg-gray-900 px-1 rounded">configurazioni</code> ed
+          entraci.</p>
+        <p>2. Crea un file <code class="text-gray-400 bg-gray-900 px-1 rounded">server.conf</code>.</p>
+        <p>3. Esci dalla cartella tornando alla root del tuo progetto.</p>
+        <p>4. Fai una copia esatta dell'intera cartella configurazioni chiamandola <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">configurazioni_backup</code>.</p>
+        <p>5. Usa il comando per elencare i dettagli e verificare che esistano entrambe.</p>
+      </div>
+
+      <button onclick="toggleSolution('sol-3')"
+        class="text-sm flex items-center gap-2 text-gray-400 hover:text-white transition-colors bg-gray-900 px-4 py-2 rounded-lg border border-gray-700">
+        <i data-lucide="eye" class="w-4 h-4"></i> Rivela Soluzione
+      </button>
+
+      <div id="sol-3" class="solution-container mt-4">
+        <div class="bg-gray-950 p-4 rounded-xl border border-green-900/50 font-mono text-sm text-gray-300">
+          <span class="text-green-500">$</span> mkdir configurazioni<br>
+          <span class="text-green-500">$</span> cd configurazioni<br>
+          <span class="text-green-500">$</span> touch server.conf<br>
+          <span class="text-green-500">$</span> cd ..<br>
+          <span class="text-green-500">$</span> cp -r configurazioni configurazioni_backup<br>
+          <span class="text-green-500">$</span> ls -l
+        </div>
+      </div>
+    </article>
+
+    <!-- Missione 4 -->
+    <article
+      class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 md:p-8 animate-fade-in delay-300">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-lg bg-red-900/50 flex items-center justify-center border border-red-500/30">
+          <i data-lucide="flame" class="w-5 h-5 text-red-400"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-white">Missione 4: Il Buco Nero</h2>
+          <p class="text-sm text-red-400 font-mono">Focus: Rimozione attenta</p>
+        </div>
+      </div>
+
+      <div class="text-gray-300 space-y-2 mb-6 ml-2">
+        <p>1. Entra nella cartella <code class="text-gray-400 bg-gray-900 px-1 rounded">configurazioni_backup</code>
+          creata nella missione precedente.</p>
+        <p>2. Cancella definitivamente il file <code class="text-gray-400 bg-gray-900 px-1 rounded">server.conf</code>.
+        </p>
+        <p>3. Esci dalla cartella.</p>
+        <p>4. Distruggi l'intera cartella vuota <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">configurazioni_backup</code>.</p>
+      </div>
+
+      <button onclick="toggleSolution('sol-4')"
+        class="text-sm flex items-center gap-2 text-gray-400 hover:text-white transition-colors bg-gray-900 px-4 py-2 rounded-lg border border-gray-700">
+        <i data-lucide="eye" class="w-4 h-4"></i> Rivela Soluzione
+      </button>
+
+      <div id="sol-4" class="solution-container mt-4">
+        <div class="bg-gray-950 p-4 rounded-xl border border-green-900/50 font-mono text-sm text-gray-300">
+          <span class="text-green-500">$</span> cd configurazioni_backup<br>
+          <span class="text-green-500">$</span> rm server.conf<br>
+          <span class="text-green-500">$</span> cd ..<br>
+          <span class="text-gray-500"># Essendo ora vuota, puoi usare rmdir o rm -r</span><br>
+          <span class="text-green-500">$</span> rm -r configurazioni_backup
+        </div>
+      </div>
+    </article>
+
+    <!-- Missione 5 -->
+    <article
+      class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 md:p-8 animate-fade-in delay-300">
+      <div class="flex items-center gap-3 mb-4">
         <div
-          class="bg-gray-800 rounded-xl p-5 border border-gray-700 md:col-span-2 flex flex-col md:flex-row gap-6 items-center">
-          <div class="flex-1">
-            <h3 class="text-lg font-bold text-red-400 mb-2">Scenario: Pulizia Profonda</h3>
-            <p class="text-gray-400 text-sm mb-3">Eliminare dati in modo irreversibile. Assicurati SEMPRE di sapere dove
-              sei (usa <code>pwd</code>) prima di lanciare questi comandi.</p>
-          </div>
-          <div class="flex-1 w-full font-mono text-sm bg-gray-900 p-3 rounded border border-red-900 text-gray-300">
-            <span class="text-green-500">$</span> rm vecchio_log.txt<br>
-            <span class="text-gray-500"># Elimina cartella piena</span><br>
-            <span class="text-green-500">$</span> rm -r cartella_vecchia/
-          </div>
+          class="w-10 h-10 rounded-lg bg-emerald-900/50 flex items-center justify-center border border-emerald-500/30">
+          <i data-lucide="search" class="w-5 h-5 text-emerald-400"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-white">Missione 5: L'Investigatore</h2>
+          <p class="text-sm text-emerald-400 font-mono">Focus: Lettura log lunghi</p>
         </div>
       </div>
-    </section>
 
-    <!-- PARTE 2: MISSIONI PRATICHE -->
-    <section class="animate-fade-in delay-200">
-      <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
-        <i data-lucide="target" class="w-6 h-6 text-orange-400"></i>
-        <h2 class="text-2xl font-bold text-white">2. Missioni sul Terminale</h2>
+      <div class="text-gray-300 space-y-2 mb-6 ml-2">
+        <p>1. Naviga in modo assoluto fino alla directory di sistema <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">/var/log</code>.</p>
+        <p>2. Usa il comando per elencare i file e individua un file di log (es. <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">dpkg.log</code> o <code
+            class="text-gray-400 bg-gray-900 px-1 rounded">syslog</code>).</p>
+        <p>3. Prova a leggerlo tutto intero con il comando base di lettura. Scorrerà velocissimo.</p>
+        <p>4. Ora riaprilo con il comando di lettura a scorrimento interattivo, scorri in basso, poi premi 'q' per
+          uscire.</p>
+        <p>5. Stampa a video <strong>solo le ultime righe</strong> per vedere l'evento più recente.</p>
       </div>
-      <p class="text-gray-400 mb-6">Apri il tuo terminale reale (WSL o Webminal) ed esegui queste operazioni. Non
-        proseguire finché non hai completato ogni step.</p>
 
-      <div class="space-y-6">
-        <!-- Missione A -->
-        <div class="relative pl-8 border-l-2 border-orange-500">
-          <div class="absolute -left-[11px] top-0 bg-gray-900 p-1">
-            <div class="w-4 h-4 rounded-full bg-orange-500"></div>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-2">Missione Alpha: L'Archivista</h3>
-          <ul class="list-decimal list-inside text-gray-300 space-y-2 marker:text-orange-500">
-            <li>Torna alla tua home directory in modo assoluto.</li>
-            <li>Crea una cartella chiamata <code class="text-orange-300 bg-gray-800 px-1 rounded">segreto</code>.</li>
-            <li>Entra in <code class="text-orange-300 bg-gray-800 px-1 rounded">segreto</code> e crea un file nascosto
-              chiamato <code class="text-orange-300 bg-gray-800 px-1 rounded">.password.txt</code>.</li>
-            <li>Torna indietro di un livello.</li>
-            <li>Lancia il comando per elencare i file in modo che il file <code
-                class="text-orange-300 bg-gray-800 px-1 rounded">.password.txt</code> sia visibile da fuori.</li>
-          </ul>
-        </div>
+      <button onclick="toggleSolution('sol-5')"
+        class="text-sm flex items-center gap-2 text-gray-400 hover:text-white transition-colors bg-gray-900 px-4 py-2 rounded-lg border border-gray-700">
+        <i data-lucide="eye" class="w-4 h-4"></i> Rivela Soluzione
+      </button>
 
-        <!-- Missione B -->
-        <div class="relative pl-8 border-l-2 border-orange-500">
-          <div class="absolute -left-[11px] top-0 bg-gray-900 p-1">
-            <div class="w-4 h-4 rounded-full bg-orange-500"></div>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-2">Missione Beta: Distruzione Controllata</h3>
-          <ul class="list-decimal list-inside text-gray-300 space-y-2 marker:text-orange-500">
-            <li>Crea una cartella chiamata <code class="text-orange-300 bg-gray-800 px-1 rounded">da_cancellare</code>.
-            </li>
-            <li>Al suo interno crea tre file: <code class="text-orange-300 bg-gray-800 px-1 rounded">1.txt</code>, <code
-                class="text-orange-300 bg-gray-800 px-1 rounded">2.txt</code>, <code
-                class="text-orange-300 bg-gray-800 px-1 rounded">3.txt</code>.</li>
-            <li>Copia il file <code class="text-orange-300 bg-gray-800 px-1 rounded">1.txt</code> e chiamalo <code
-                class="text-orange-300 bg-gray-800 px-1 rounded">salvato.txt</code>, spostandolo fuori dalla cartella.
-            </li>
-            <li>Con <strong>un solo comando</strong>, elimina la cartella <code
-                class="text-orange-300 bg-gray-800 px-1 rounded">da_cancellare</code> e tutto il suo contenuto.</li>
-          </ul>
+      <div id="sol-5" class="solution-container mt-4">
+        <div class="bg-gray-950 p-4 rounded-xl border border-green-900/50 font-mono text-sm text-gray-300">
+          <span class="text-green-500">$</span> cd /var/log<br>
+          <span class="text-green-500">$</span> ls<br>
+          <span class="text-green-500">$</span> cat dpkg.log <span class="text-gray-600"># o il nome del log che hai
+            trovato</span><br>
+          <span class="text-green-500">$</span> less dpkg.log <span class="text-gray-600"># (usa le frecce, poi premi
+            q)</span><br>
+          <span class="text-green-500">$</span> tail dpkg.log
         </div>
       </div>
-    </section>
-
-    <!-- PARTE 3: QUIZ INTERATTIVO -->
-    <section class="animate-fade-in delay-200">
-      <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
-        <i data-lucide="check-square" class="w-6 h-6 text-green-400"></i>
-        <h2 class="text-2xl font-bold text-white">3. Quiz di Verifica</h2>
-      </div>
-
-      <div id="quiz-container" class="bg-gray-950 border border-gray-700 rounded-xl p-6 md:p-8 shadow-lg">
-        <!-- I contenitori delle domande verranno generati via JS -->
-        <div id="questions-wrapper"></div>
-
-        <div class="mt-8 flex justify-between items-center border-t border-gray-800 pt-6">
-          <div id="quiz-feedback" class="text-lg font-bold hidden"></div>
-          <button id="submit-quiz" onclick="checkQuiz()"
-            class="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 ml-auto">
-            <i data-lucide="send" class="w-5 h-5"></i> Valuta Risposte
-          </button>
-          <button id="retry-quiz" onclick="resetQuiz()"
-            class="hidden bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors ml-auto">
-            Riprova
-          </button>
-        </div>
-      </div>
-    </section>
+    </article>
 
   </main>
 
   <!-- Footer -->
   <footer class="border-t border-gray-800 py-8 bg-gray-900 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm font-mono">
-      root@its-lab:~# end_lab_session
+      root@its-lab:~# exit
     </div>
   </footer>
 
-  <!-- Logica del Quiz -->
+  <!-- Logic for toggle buttons and icons -->
   <script>
     lucide.createIcons();
 
-    const quizData = [
-      {
-        question: "1. Quale comando si utilizza per scoprire in quale cartella ti trovi attualmente?",
-        options: ["cd", "pwd", "ls", "whereami"],
-        correct: 1,
-        explanation: "<strong>pwd</strong> sta per 'Print Working Directory' e stampa il percorso assoluto della cartella corrente."
-      },
-      {
-        question: "2. Come si fa a risalire di una directory (andare nella cartella padre)?",
-        options: ["cd ..", "cd /", "cd -up", "up"],
-        correct: 0,
-        explanation: "I due punti (<strong>..</strong>) rappresentano sempre la directory superiore rispetto a quella attuale."
-      },
-      {
-        question: "3. Quale opzione del comando 'ls' permette di visualizzare anche i file nascosti?",
-        options: ["ls -l", "ls -h", "ls -a", "ls -show"],
-        correct: 2,
-        explanation: "Il flag <strong>-a</strong> (all) mostra tutto il contenuto, compresi i file che iniziano con un punto (file nascosti)."
-      },
-      {
-        question: "4. Vuoi leggere un file di log molto lungo senza inondare il terminale. Quale comando usi?",
-        options: ["cat", "touch", "less", "echo"],
-        correct: 2,
-        explanation: "<strong>less</strong> apre il file in un visualizzatore interattivo che permette di scorrere il testo pagina per pagina."
-      },
-      {
-        question: "5. Cosa succede se esegui 'rm file.txt'?",
-        options: [
-          "Il file viene spostato nel Cestino.",
-          "Il file viene nascosto.",
-          "Viene chiesta conferma prima di eliminare.",
-          "Il file viene eliminato permanentemente all'istante."
-        ],
-        correct: 3,
-        explanation: "In Linux CLI non c'è cestino. Il comando <strong>rm</strong> cancella in modo irreversibile senza chiedere conferma (a meno che non si usi il flag -i)."
-      }
-    ];
-
-    let userAnswers = new Array(quizData.length).fill(null);
-
-    function renderQuiz() {
-      const wrapper = document.getElementById('questions-wrapper');
-      wrapper.innerHTML = '';
-
-      quizData.forEach((q, qIndex) => {
-        const qBlock = document.createElement('div');
-        qBlock.className = 'mb-8 last:mb-0';
-
-        const qTitle = document.createElement('h3');
-        qTitle.className = 'text-xl font-bold text-white mb-4';
-        qTitle.textContent = q.question;
-        qBlock.appendChild(qTitle);
-
-        const optionsGrid = document.createElement('div');
-        optionsGrid.className = 'space-y-2';
-
-        q.options.forEach((opt, oIndex) => {
-          const optDiv = document.createElement('div');
-          optDiv.className = 'quiz-option';
-          optDiv.id = `q${qIndex}-o${oIndex}`;
-
-          optDiv.innerHTML = `
-                        <div class="w-5 h-5 rounded-full border-2 border-gray-500 mr-4 flex items-center justify-center indicator">
-                            <div class="w-2.5 h-2.5 rounded-full bg-blue-500 hidden inner-dot"></div>
-                        </div>
-                        <span class="text-gray-200">${opt}</span>
-                    `;
-
-          optDiv.onclick = () => selectOption(qIndex, oIndex);
-          optionsGrid.appendChild(optDiv);
-        });
-
-        qBlock.appendChild(optionsGrid);
-
-        // Explanation container (hidden initially)
-        const expDiv = document.createElement('div');
-        expDiv.id = `exp-${qIndex}`;
-        expDiv.className = 'hidden mt-3 p-4 rounded-lg bg-gray-800 border border-gray-700 text-gray-300 text-sm';
-        expDiv.innerHTML = `<i data-lucide="info" class="w-4 h-4 inline mr-2 text-blue-400"></i>${q.explanation}`;
-        qBlock.appendChild(expDiv);
-
-        wrapper.appendChild(qBlock);
-      });
-      lucide.createIcons();
-    }
-
-    function selectOption(qIndex, oIndex) {
-      // Se il quiz è già stato sottomesso, blocca i click
-      if (document.getElementById('submit-quiz').classList.contains('hidden')) return;
-
-      userAnswers[qIndex] = oIndex;
-
-      // Reset styles for this question
-      for (let i = 0; i < quizData[qIndex].options.length; i++) {
-        const el = document.getElementById(`q${qIndex}-o${i}`);
-        el.classList.remove('selected');
-        el.querySelector('.inner-dot').classList.add('hidden');
-        el.querySelector('.indicator').classList.remove('border-blue-500');
-      }
-
-      // Apply selected style
-      const selectedEl = document.getElementById(`q${qIndex}-o${oIndex}`);
-      selectedEl.classList.add('selected');
-      selectedEl.querySelector('.inner-dot').classList.remove('hidden');
-      selectedEl.querySelector('.indicator').classList.add('border-blue-500');
-    }
-
-    function checkQuiz() {
-      // Check if all answered
-      if (userAnswers.includes(null)) {
-        const feedback = document.getElementById('quiz-feedback');
-        feedback.innerHTML = '<span class="text-yellow-500"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Rispondi a tutte le domande prima di valutare!</span>';
-        feedback.classList.remove('hidden');
-        setTimeout(() => feedback.classList.add('hidden'), 3000);
-        return;
-      }
-
-      let score = 0;
-
-      quizData.forEach((q, qIndex) => {
-        const selectedOpt = userAnswers[qIndex];
-        const correctOpt = q.correct;
-
-        // Mostra spiegazione
-        document.getElementById(`exp-${qIndex}`).classList.remove('hidden');
-
-        if (selectedOpt === correctOpt) {
-          score++;
-          document.getElementById(`q${qIndex}-o${selectedOpt}`).classList.add('correct');
-          document.getElementById(`q${qIndex}-o${selectedOpt}`).classList.remove('selected');
-        } else {
-          document.getElementById(`q${qIndex}-o${selectedOpt}`).classList.add('wrong');
-          document.getElementById(`q${qIndex}-o${correctOpt}`).classList.add('correct'); // Mostra quale era giusta
-        }
-      });
-
-      // Update UI
-      document.getElementById('submit-quiz').classList.add('hidden');
-      document.getElementById('retry-quiz').classList.remove('hidden');
-
-      const feedback = document.getElementById('quiz-feedback');
-      feedback.classList.remove('hidden');
-
-      if (score === quizData.length) {
-        feedback.innerHTML = `<span class="text-green-500">Perfetto! Punteggio: ${score}/${quizData.length}. Modulo 2 superato.</span>`;
-      } else if (score >= quizData.length / 2) {
-        feedback.innerHTML = `<span class="text-yellow-500">Buono! Punteggio: ${score}/${quizData.length}. Rivedi gli errori.</span>`;
+    function toggleSolution(id) {
+      const container = document.getElementById(id);
+      if (container.classList.contains('open')) {
+        container.classList.remove('open');
       } else {
-        feedback.innerHTML = `<span class="text-red-500">Punteggio: ${score}/${quizData.length}. Ti consiglio di rileggere la guida.</span>`;
+        container.classList.add('open');
       }
     }
-
-    function resetQuiz() {
-      userAnswers = new Array(quizData.length).fill(null);
-      document.getElementById('submit-quiz').classList.remove('hidden');
-      document.getElementById('retry-quiz').classList.add('hidden');
-      document.getElementById('quiz-feedback').classList.add('hidden');
-      renderQuiz();
-    }
-
-    // Init
-    renderQuiz();
   </script>
 </body>
 
