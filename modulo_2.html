@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corso Linux ITS - Modulo 2</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Custom scrollbar for terminal */
+    #terminal-history::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #terminal-history::-webkit-scrollbar-track {
+      background: #111827;
+    }
+
+    #terminal-history::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 4px;
+    }
+
+    #terminal-history::-webkit-scrollbar-thumb:hover {
+      background: #4B5563;
+    }
+
+    /* Rimuove l'outline blu di default dall'input del terminale */
+    #terminal-input:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  </style>
+</head>
+
+<body
+  class="min-h-screen bg-gray-900 text-gray-100 flex flex-col font-sans selection:bg-green-500 selection:text-white">
+
+  <!-- Progress bar -->
+  <div class="w-full h-2 bg-gray-800">
+    <div id="progress-bar" class="h-full bg-green-500 transition-all duration-500 ease-out" style="width: 0%;"></div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex flex-col items-center justify-center p-8 relative">
+    <div class="max-w-5xl w-full">
+
+      <!-- Section Badge -->
+      <div class="mb-6 text-center md:text-left">
+        <span id="slide-part"
+          class="inline-block px-4 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-mono uppercase tracking-wider border border-gray-700">
+          <!-- Part text goes here -->
+        </span>
+      </div>
+
+      <!-- Slide Content Container -->
+      <div id="slide-container"
+        class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 md:p-12 shadow-2xl min-h-[500px] flex flex-col justify-center transform transition-all duration-300">
+
+        <!-- STANDARD LAYOUT (Testo + Immagine) -->
+        <div id="standard-layout" class="flex flex-col lg:flex-row gap-8 items-center w-full">
+          <!-- Text Column -->
+          <div class="flex-1 w-full">
+            <div class="flex items-center justify-center md:justify-start gap-4 mb-8">
+              <div id="slide-icon-container"></div>
+              <h1 id="slide-title" class="text-3xl md:text-5xl font-bold text-white tracking-tight">
+                <!-- Title goes here -->
+              </h1>
+            </div>
+            <ul id="slide-items" class="space-y-6 text-lg md:text-2xl text-gray-300">
+              <!-- Items go here -->
+            </ul>
+          </div>
+
+          <!-- Image Column -->
+          <div id="slide-image-col" class="flex-1 w-full flex justify-center items-center mt-8 lg:mt-0 animate-fade-in"
+            style="display: none;">
+            <div
+              class="relative p-2 bg-gray-800 border border-gray-700 rounded-xl shadow-inner w-full flex justify-center">
+              <img id="slide-image" src="" alt=""
+                class="w-full h-auto max-h-[300px] object-contain rounded-lg bg-white p-2"
+                onerror="this.src='https://placehold.co/600x400/1f2937/10b981?text=Immagine+Non+Trovata'">
+            </div>
+          </div>
+        </div>
+
+        <!-- TERMINAL LAYOUT (Istruzioni + Terminale) -->
+        <div id="terminal-layout" class="w-full flex flex-col lg:flex-row gap-8 items-stretch animate-fade-in"
+          style="display: none;">
+
+          <!-- Istruzioni Colonna Sinistra -->
+          <div class="flex-1 w-full lg:w-1/3 flex flex-col justify-center">
+            <div class="flex items-center gap-4 mb-6">
+              <i data-lucide="terminal-square" class="w-10 h-10 text-green-500"></i>
+              <h1 class="text-3xl font-bold text-white">Simulazione</h1>
+            </div>
+            <p class="text-gray-400 mb-6 text-lg">Digita i comandi nell'ordine esatto per superare il modulo:</p>
+            <ol class="space-y-3 text-gray-300 text-lg list-decimal list-inside ml-2">
+              <li>Verifica dove sei (<code class="text-green-400 bg-gray-900 px-1 rounded">pwd</code>)</li>
+              <li>Crea cartella <code class="text-green-400 bg-gray-900 px-1 rounded">its_lab</code> ed entraci</li>
+              <li>Crea <code class="text-green-400 bg-gray-900 px-1 rounded">a.txt</code> e <code
+                  class="text-green-400 bg-gray-900 px-1 rounded">b.txt</code></li>
+              <li>Rinomina a.txt in <code class="text-green-400 bg-gray-900 px-1 rounded">test.txt</code></li>
+              <li>Visualizza contenuto (<code class="text-green-400 bg-gray-900 px-1 rounded">ls -l</code>)</li>
+              <li>Rimuovi <code class="text-green-400 bg-gray-900 px-1 rounded">b.txt</code></li>
+              <li>Torna alla home (<code class="text-green-400 bg-gray-900 px-1 rounded">..</code>) e distruggi <code
+                  class="text-green-400 bg-gray-900 px-1 rounded">its_lab</code></li>
+            </ol>
+          </div>
+
+          <!-- Finto Terminale Colonna Destra -->
+          <div
+            class="flex-1 w-full lg:w-2/3 bg-gray-950 border border-gray-700 rounded-xl overflow-hidden shadow-inner flex flex-col font-mono text-sm md:text-base cursor-text"
+            onclick="document.getElementById('terminal-input').focus();">
+            <!-- Barra Titolo Terminale -->
+            <div class="bg-gray-800 px-4 py-2 flex items-center border-b border-gray-700">
+              <div class="flex gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+              </div>
+              <div class="mx-auto text-gray-400 text-xs">studente@its-lab: ~</div>
+            </div>
+
+            <!-- Area Terminale -->
+            <div class="p-4 flex-grow flex flex-col h-[350px]">
+              <!-- Cronologia Comandi -->
+              <div id="terminal-history" class="flex-grow overflow-y-auto mb-2 text-gray-300 pr-2 space-y-1">
+                <div class="text-green-400 mb-4">
+                  Benvenuto nel simulatore ITS LinuxLab.<br>
+                  Digita i comandi qui sotto e premi Invio.
+                </div>
+              </div>
+
+              <!-- Riga di Input -->
+              <div class="flex items-center text-gray-300">
+                <span id="terminal-prompt" class="mr-2 text-green-400 whitespace-nowrap">studente@its-lab:~$</span>
+                <input type="text" id="terminal-input"
+                  class="flex-grow bg-transparent border-none text-white font-mono w-full" autocomplete="off"
+                  spellcheck="false" autofocus>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Navigation -->
+  <footer class="p-6 bg-gray-900 border-t border-gray-800 flex items-center justify-between z-10">
+    <button id="btn-prev" onclick="prevSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+      disabled>
+      <i data-lucide="chevron-left" class="w-5 h-5"></i>
+      Precedente
+    </button>
+
+    <div id="footer-text" class="text-gray-500 font-mono text-sm hidden md:block">
+      root@its-lab:~# slide 1 di X
+    </div>
+
+    <button id="btn-next" onclick="nextSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-green-600 text-white hover:bg-green-500 hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:scale-105 active:scale-95">
+      Successiva
+      <i data-lucide="chevron-right" class="w-5 h-5"></i>
+    </button>
+  </footer>
+
+  <script>
+    const slidesData = [
+      {
+        part: "MODULO 2: LA CLI",
+        title: "Sopravvivenza nel Terminale",
+        icon: "terminal", iconColor: "text-green-400",
+        items: [
+          "Titolo: Sopravvivenza nella Command Line (CLI).",
+          "Abbandoniamo definitivamente il mouse.",
+          "Iniziamo a comunicare direttamente con il cuore del sistema operativo."
+        ]
+      },
+      {
+        part: "STRUTTURA DEL SISTEMA",
+        title: "L'Albero delle Directory",
+        icon: "folder-tree", iconColor: "text-blue-400",
+        image: "https://upload.wikimedia.org/wikipedia/commons/f/f3/Standard-unix-filesystem-hierarchy.svg",
+        imageAlt: "File System Linux FHS",
+        items: [
+          "In Linux tutto parte dalla 'root' o radice, rappresentata dal carattere slash ( / ).",
+          "• /bin: I comandi base di sistema (es. ls, cp).",
+          "• /etc: I file di configurazione globali e di sistema.",
+          "• /home: Le cartelle personali degli utenti.",
+          "• /var: File variabili nel tempo come i log (es. /var/log)."
+        ]
+      },
+      {
+        part: "STRUTTURA DEL SISTEMA",
+        title: "Percorsi Assoluti vs Relativi",
+        icon: "map-pin", iconColor: "text-blue-400",
+        items: [
+          "In Linux ci sono due modi di indicare la posizione di un file.",
+          "Percorso Assoluto: Parte sempre dalla radice ( / ) ed è inequivocabile. Es: /home/studente/file.txt",
+          "Percorso Relativo: Parte dalla tua posizione attuale. Usa '.' (corrente) o '..' (directory superiore). Es: ../file.txt"
+        ]
+      },
+      {
+        part: "COMANDI DI NAVIGAZIONE",
+        title: "I Tre Pilastri",
+        icon: "compass", iconColor: "text-yellow-400",
+        items: [
+          "pwd (Print Working Directory): Il tuo GPS. Ti dice esattamente in quale cartella ti trovi in questo momento.",
+          "cd (Change Directory): Il tuo mezzo di trasporto. Spostati tra le cartelle fornendo un percorso.",
+          "ls (List): I tuoi occhi. Elenca file e cartelle nella directory in cui ti trovi."
+        ]
+      },
+      {
+        part: "COMANDI DI NAVIGAZIONE",
+        title: "Le Opzioni di 'ls'",
+        icon: "list", iconColor: "text-yellow-400",
+        items: [
+          "ls -l (Formato Lungo): Mostra i dettagli. Permessi, proprietario, data e dimensione.",
+          "ls -a (Mostra Tutto): Include i file nascosti (su Linux iniziano con un punto, es. .bashrc).",
+          "ls -h (Human Readable): Rende le dimensioni comprensibili (KB, MB, GB).",
+          "ls -lah: Combina tutto! Elenco completo, con file nascosti e dimensioni umane in formato colonna."
+        ]
+      },
+      {
+        part: "GESTIONE DEL SISTEMA",
+        title: "Creare e Spostare",
+        icon: "file-edit", iconColor: "text-purple-400",
+        items: [
+          "mkdir nome: Crea una nuova directory (cartella).",
+          "touch file.txt: Crea file vuoti all'istante (o ne aggiorna la data se esistono già).",
+          "cp orig dest: Copia un file. Usa cp -r per copiare intere cartelle.",
+          "mv vecchio nuovo: Sposta un file o una cartella. Su Linux si usa anche per rinominare!"
+        ]
+      },
+      {
+        part: "GESTIONE DEL SISTEMA",
+        title: "Attenzione a 'rm'",
+        icon: "alert-triangle", iconColor: "text-red-500",
+        image: "https://www.computerhope.com/issues/pictures/no-recyclebin.png",
+        imageAlt: "Warning",
+        items: [
+          "In Linux CLI NON ESISTE IL CESTINO. Cancellato = Perso per sempre.",
+          "rm file.txt: Cancella un singolo file in modo permanente.",
+          "rm -r cartella: (Recursive) Cancella intere cartelle e il loro contenuto.",
+          "rm -rf / : Forza la cancellazione dell'intero sistema. NON DIGITARLO MAI."
+        ]
+      },
+      {
+        part: "LEGGERE I CONTENUTI",
+        title: "cat, less e tail",
+        icon: "book-open", iconColor: "text-cyan-400",
+        items: [
+          "cat file.txt: Stampa l'intero contenuto di un file testuale direttamente sul terminale.",
+          "less file.txt: Apre un visualizzatore a scorrimento pulito (usa le frecce, premi 'q' per uscire).",
+          "tail -f file.log: Legge e mostra in tempo reale le ultime righe aggiunte a un file. Indispensabile per monitorare gli errori!"
+        ]
+      },
+      {
+        part: "PRATICA IN LABORATORIO",
+        title: "Esercitazione: Le Regole",
+        icon: "check-square", iconColor: "text-green-500",
+        items: [
+          "Task 1: Apri il terminale, verifica dove sei con 'pwd'.",
+          "Task 2: Crea la cartella 'its_lab' ed entraci.",
+          "Task 3: Crea due file vuoti ('a.txt', 'b.txt') e rinomina 'a.txt' in 'test.txt'.",
+          "Task 4: Verifica il contenuto con 'ls -l'.",
+          "Task 5: Rimuovi 'b.txt', torna alla directory padre ('..') e distruggi definitivamente la cartella 'its_lab'."
+        ]
+      },
+      {
+        part: "PRATICA IN LABORATORIO",
+        isTerminal: true // FLAG SPECIALE PER ATTIVARE IL LAYOUT DEL TERMINALE
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function renderSlide() {
+      const slide = slidesData[currentIndex];
+      const container = document.getElementById('slide-container');
+      const standardLayout = document.getElementById('standard-layout');
+      const terminalLayout = document.getElementById('terminal-layout');
+
+      // Re-trigger animation
+      container.classList.remove('animate-fade-in');
+      void container.offsetWidth; // trigger reflow
+      container.classList.add('animate-fade-in');
+
+      // Set Header text
+      document.getElementById('slide-part').textContent = slide.part;
+      document.getElementById('footer-text').textContent = `root@its-lab:~# slide ${currentIndex + 1} di ${slidesData.length}`;
+
+      if (slide.isTerminal) {
+        // MOSTRA LAYOUT TERMINALE
+        standardLayout.style.display = 'none';
+        terminalLayout.style.display = 'flex';
+        // Focus automatico sull'input
+        setTimeout(() => document.getElementById('terminal-input').focus(), 100);
+      } else {
+        // MOSTRA LAYOUT STANDARD
+        standardLayout.style.display = 'flex';
+        terminalLayout.style.display = 'none';
+
+        document.getElementById('slide-title').textContent = slide.title;
+        document.getElementById('slide-icon-container').innerHTML = `<i data-lucide="${slide.icon}" class="w-12 h-12 ${slide.iconColor} mb-4"></i>`;
+
+        const itemsHtml = slide.items.map(item => {
+          const isIndented = /^[123]\.|^Task|^•/.test(item);
+          return `
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-4 mt-1">$</span>
+                            <span class="${isIndented ? 'ml-6' : ''}">${item}</span>
+                        </li>
+                    `;
+        }).join('');
+        document.getElementById('slide-items').innerHTML = itemsHtml;
+
+        const imgCol = document.getElementById('slide-image-col');
+        if (slide.image) {
+          imgCol.style.display = 'flex';
+          document.getElementById('slide-image').src = slide.image;
+          document.getElementById('slide-image').alt = slide.imageAlt || 'Immagine slide';
+        } else {
+          imgCol.style.display = 'none';
+        }
+      }
+
+      // Update Progress Bar
+      const progress = ((currentIndex + 1) / slidesData.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+
+      // Update Buttons State
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+
+      btnPrev.disabled = currentIndex === 0;
+      btnPrev.className = currentIndex === 0
+        ? "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+        : "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white hover:scale-105 active:scale-95";
+
+      btnNext.disabled = currentIndex === slidesData.length - 1;
+      btnNext.className = currentIndex === slidesData.length - 1
+        ? "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+        : "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-green-600 text-white hover:bg-green-500 hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:scale-105 active:scale-95";
+
+      lucide.createIcons();
+    }
+
+    function nextSlide() {
+      if (currentIndex < slidesData.length - 1) {
+        currentIndex++;
+        renderSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderSlide();
+      }
+    }
+
+    // KEYBOARD NAVIGATION
+    document.addEventListener('keydown', (e) => {
+      // Evita che la navigazione scatti mentre si scrive nel terminale
+      if (e.target.tagName.toLowerCase() === 'input') return;
+
+      if (e.key === 'ArrowRight') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+
+    // ==========================================
+    // LOGICA DEL FINTO TERMINALE
+    // ==========================================
+    const termInput = document.getElementById("terminal-input");
+    const termHistory = document.getElementById("terminal-history");
+    const termPrompt = document.getElementById("terminal-prompt");
+
+    let currentStep = 0;
+    let currentPath = "~";
+
+    const steps = [
+      { expected: ["pwd"], output: "/home/studente" },
+      { expected: ["mkdir its_lab", "mkdir ./its_lab"], output: "" },
+      { expected: ["cd its_lab", "cd ./its_lab"], output: "", newPath: "~/its_lab" },
+      { expected: ["touch a.txt b.txt", "touch b.txt a.txt"], output: "" },
+      { expected: ["mv a.txt test.txt", "mv ./a.txt ./test.txt"], output: "" },
+      { expected: ["ls -l"], output: "-rw-r--r-- 1 studente studente 0 Apr 28 13:00 b.txt<br>-rw-r--r-- 1 studente studente 0 Apr 28 13:00 test.txt" },
+      { expected: ["rm b.txt", "rm ./b.txt"], output: "" },
+      { expected: ["cd ..", "cd ../", "cd"], output: "", newPath: "~" },
+      { expected: ["rm -r its_lab", "rm -rf its_lab", "rm -r ./its_lab", "rmdir its_lab"], output: "<span class='text-green-400 font-bold'>Missione Completata! Sei pronto per il mondo reale.</span>" }
+    ];
+
+    termInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        let cmd = termInput.value.trim().replace(/\s+/g, ' '); // Pulisce spazi multipli
+
+        if (!cmd) return;
+
+        // Stampa comando
+        termHistory.innerHTML += `<div><span class="text-green-400">studente@its-lab:${currentPath}$</span> <span class="text-white">${cmd}</span></div>`;
+
+        if (currentStep < steps.length) {
+          let match = steps[currentStep].expected.includes(cmd);
+
+          if (match) {
+            if (steps[currentStep].output) {
+              termHistory.innerHTML += `<div class="text-gray-300">${steps[currentStep].output}</div>`;
+            }
+            if (steps[currentStep].newPath) {
+              currentPath = steps[currentStep].newPath;
+              termPrompt.textContent = `studente@its-lab:${currentPath}$`;
+            }
+            currentStep++;
+          } else {
+            // Comando errato o eseguito nel momento sbagliato
+            if (cmd.startsWith("rm -rf /")) {
+              termHistory.innerHTML += `<div class="text-red-500 font-bold">ERRORE CRITICO: Vuoi davvero distruggere il server? Riprova.</div>`;
+            } else {
+              termHistory.innerHTML += `<div class="text-red-400">Errore: Comando errato o non eseguito nell'ordine corretto. Controlla la lista a sinistra.</div>`;
+            }
+          }
+        } else {
+          termHistory.innerHTML += `<div class="text-gray-400">Esercitazione terminata. Non c'è altro da fare qui.</div>`;
+        }
+
+        // Pulisci input e scrolla giù
+        termInput.value = "";
+        termHistory.scrollTop = termHistory.scrollHeight;
+      }
+    });
+
+    // Initial Render
+    renderSlide();
+  </script>
+</body>
+
+</html>

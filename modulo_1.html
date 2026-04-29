@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corso Linux ITS</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body
+  class="min-h-screen bg-gray-900 text-gray-100 flex flex-col font-sans selection:bg-green-500 selection:text-white">
+
+  <!-- Progress bar -->
+  <div class="w-full h-2 bg-gray-800">
+    <div id="progress-bar" class="h-full bg-green-500 transition-all duration-500 ease-out" style="width: 0%;"></div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex flex-col items-center justify-center p-8 relative">
+    <div class="max-w-4xl w-full">
+
+      <!-- Section Badge -->
+      <div class="mb-8 text-center md:text-left">
+        <span id="slide-part"
+          class="inline-block px-4 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-mono uppercase tracking-wider border border-gray-700">
+          <!-- Part text goes here -->
+        </span>
+      </div>
+
+      <!-- Slide Content Container -->
+      <div id="slide-container"
+        class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 md:p-12 shadow-2xl min-h-[400px] flex flex-col justify-center transform transition-all duration-300">
+
+        <div class="flex flex-col lg:flex-row gap-8 items-center w-full">
+
+          <!-- Text Column -->
+          <div class="flex-1 w-full">
+            <div class="flex items-center justify-center md:justify-start gap-4 mb-8">
+              <div id="slide-icon-container"></div>
+              <h1 id="slide-title" class="text-3xl md:text-5xl font-bold text-white tracking-tight">
+                <!-- Title goes here -->
+              </h1>
+            </div>
+
+            <ul id="slide-items" class="space-y-6 text-lg md:text-2xl text-gray-300">
+              <!-- Items go here -->
+            </ul>
+          </div>
+
+          <!-- Image Column -->
+          <div id="slide-image-col" class="flex-1 w-full flex justify-center items-center mt-8 lg:mt-0 animate-fade-in"
+            style="display: none;">
+            <div
+              class="relative p-2 bg-gray-800 border border-gray-700 rounded-xl shadow-inner w-full flex justify-center">
+              <img id="slide-image" src="" alt="" class="w-full h-auto max-h-[300px] object-contain rounded-lg"
+                onerror="this.src='https://placehold.co/600x400/1f2937/10b981?text=Immagine+Non+Trovata'">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Navigation -->
+  <footer class="p-6 bg-gray-900 border-t border-gray-800 flex items-center justify-between z-10">
+    <button id="btn-prev" onclick="prevSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+      disabled>
+      <i data-lucide="chevron-left" class="w-5 h-5"></i>
+      Precedente
+    </button>
+
+    <div id="footer-text" class="text-gray-500 font-mono text-sm hidden md:block">
+      root@its-lab:~# slide 1 di X
+    </div>
+
+    <button id="btn-next" onclick="nextSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-green-600 text-white hover:bg-green-500 hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:scale-105 active:scale-95">
+      Successiva
+      <i data-lucide="chevron-right" class="w-5 h-5"></i>
+    </button>
+  </footer>
+
+  <script>
+    const slidesData = [
+      {
+        part: "PARTE 1: IL CONTESTO (Perché studiare Linux?)",
+        title: "Benvenuti!",
+        icon: "terminal", iconColor: "text-green-400",
+        items: [
+          "Titolo: Corso Linux ITS",
+          "Sottotitolo: Sopravvivere e prosperare senza l'uso del mouse.",
+          "Obiettivo del corso: Acquisire competenze pratiche per il mondo del lavoro."
+        ]
+      },
+      {
+        part: "PARTE 1: IL CONTESTO (Perché studiare Linux?)",
+        title: "Cos'è Linux?",
+        icon: "book-open", iconColor: "text-green-400",
+        image: "https://upload.wikimedia.org/wikipedia/commons/0/01/LinuxCon_Europe_Linus_Torvalds_03_%28cropped%29.jpg",
+        imageAlt: "Linus Torvalds",
+        items: [
+          "Non è solo un sistema operativo per smanettoni.",
+          "È il motore invisibile che fa girare internet.",
+          "Nasce nel 1991 da uno studente finlandese: Linus Torvalds."
+        ]
+      },
+      {
+        part: "PARTE 1: IL CONTESTO (Perché studiare Linux?)",
+        title: "Dove si trova Linux oggi?",
+        icon: "server", iconColor: "text-green-400",
+        items: [
+          "Server & Cloud: Oltre il 90% dei server mondiali (AWS, Google Cloud, Azure) usa Linux.",
+          "Mobile: Android è basato sul kernel Linux.",
+          "IoT & Automotive: Smart TV, router, sistemi di infotainment (es. Tesla).",
+          "Supercomputer: Il 100% dei 500 supercomputer più potenti al mondo usa Linux."
+        ]
+      },
+      {
+        part: "PARTE 1: IL CONTESTO (Perché studiare Linux?)",
+        title: "Open Source vs Closed Source",
+        icon: "layers", iconColor: "text-green-400",
+        items: [
+          "Closed Source (es. Windows, macOS): La ricetta segreta della Coca-Cola. Puoi berla, ma non puoi sapere come è fatta né modificarla.",
+          "Open Source (Linux): La ricetta della torta della nonna. È pubblica, puoi studiarla, migliorarla e condividerla con gli altri."
+        ]
+      },
+      {
+        part: "PARTE 1: IL CONTESTO (Perché studiare Linux?)",
+        title: "Il Vantaggio per la vostra carriera",
+        icon: "terminal", iconColor: "text-green-400",
+        items: [
+          "Perché le aziende cercano esperti Linux?",
+          "Garantisce sicurezza, stabilità e ha zero costi di licenza.",
+          "È il fondamento per ruoli molto richiesti: Sistemista, Cloud Engineer, DevOps, Cybersecurity."
+        ]
+      },
+      {
+        part: "PARTE 2: ANATOMIA DI UN SISTEMA OPERATIVO",
+        title: "Cosa c'è sotto il cofano?",
+        icon: "monitor", iconColor: "text-blue-400",
+        image: "https://upload.wikimedia.org/wikipedia/commons/8/8f/Kernel_Layout.svg",
+        imageAlt: "Schema Hardware, Kernel e Userland",
+        items: [
+          "Un Sistema Operativo (OS) è il ponte tra noi e l'hardware.",
+          "I tre livelli principali:",
+          "1. Hardware (CPU, RAM, Disco)",
+          "2. Kernel",
+          "3. Userland (Applicazioni e Utenti)"
+        ]
+      },
+      {
+        part: "PARTE 2: ANATOMIA DI UN SISTEMA OPERATIVO",
+        title: "Il Kernel (Il Direttore d'Orchestra)",
+        icon: "cpu", iconColor: "text-blue-400",
+        items: [
+          "È il cuore del sistema operativo.",
+          "Funzioni principali:",
+          "• Parla direttamente con l'hardware (es. dice al disco di girare).",
+          "• Gestisce la memoria (RAM).",
+          "• Decide quale programma deve usare la CPU e per quanto tempo."
+        ]
+      },
+      {
+        part: "PARTE 2: ANATOMIA DI UN SISTEMA OPERATIVO",
+        title: "La Userland (Lo Spazio Utente)",
+        icon: "server", iconColor: "text-blue-400",
+        items: [
+          "Tutto ciò che non è Kernel.",
+          "È l'ambiente dove eseguiamo i nostri programmi (browser, editor di testo, database).",
+          "L'utente non può (di norma) toccare l'hardware direttamente; deve sempre chiedere il permesso al Kernel."
+        ]
+      },
+      {
+        part: "PARTE 2: ANATOMIA DI UN SISTEMA OPERATIVO",
+        title: "La Shell (Il Traduttore)",
+        icon: "terminal", iconColor: "text-blue-400",
+        items: [
+          "Cos'è? È un programma che prende i comandi digitati dall'utente e li traduce in istruzioni per l'OS.",
+          "GUI (Graphical User Interface): Quella con finestre e mouse (es. Esplora Risorse).",
+          "CLI (Command Line Interface): La riga di comando. Quella che impareremo ad amare in questo corso."
+        ]
+      },
+      {
+        part: "PARTE 2: ANATOMIA DI UN SISTEMA OPERATIVO",
+        title: "Perché usare la CLI se c'è il mouse?",
+        icon: "terminal", iconColor: "text-blue-400",
+        items: [
+          "Velocità: Una volta imparata, è 10 volte più rapida di mille clic.",
+          "Automazione: Puoi scrivere uno script che esegue 1000 operazioni mentre bevi un caffè.",
+          "Lavoro da remoto: I server non hanno uno schermo. Si gestiscono da remoto tramite testo (SSH), consumando pochissima banda."
+        ]
+      },
+      {
+        part: "PARTE 3: IL MULTIVERSO DI LINUX",
+        title: "Non esiste 'un solo' Linux",
+        icon: "layers", iconColor: "text-purple-400",
+        items: [
+          "Linux, tecnicamente, è solo il Kernel.",
+          "Unendo il Kernel con vari software (spesso del progetto GNU), si ottengono le 'Distribuzioni' (o Distro)."
+        ]
+      },
+      {
+        part: "PARTE 3: IL MULTIVERSO DI LINUX",
+        title: "Le Famiglie Principali",
+        icon: "server", iconColor: "text-purple-400",
+        image: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Linux_Distribution_Timeline.svg",
+        imageAlt: "Albero delle Distribuzioni Linux",
+        items: [
+          "Famiglia Debian: (Debian, Ubuntu, Mint). Ottime per iniziare, documentazione infinita.",
+          "Famiglia Red Hat: (RHEL, Rocky Linux, AlmaLinux). Lo standard nel mondo Enterprise/Corporate.",
+          "Famiglia Arch: (Arch Linux, Manjaro). Per utenti avanzati, costantemente aggiornate (rolling release)."
+        ]
+      },
+      {
+        part: "PARTE 3: IL MULTIVERSO DI LINUX",
+        title: "La nostra scelta: Ubuntu Server",
+        icon: "terminal", iconColor: "text-purple-400",
+        items: [
+          "Nel nostro corso useremo Ubuntu Server.",
+          "Nessuna interfaccia grafica: andremo dritti al sodo, lavorando solo da terminale.",
+          "Perché? Ha la community più grande al mondo: se avete un problema, qualcuno su internet lo ha già risolto."
+        ]
+      },
+      {
+        part: "PARTE 4: IL PRIMO APPROCCIO",
+        title: "La Palestra Online: Webminal",
+        icon: "monitor", iconColor: "text-yellow-400",
+        image: "https://placehold.co/600x400/1f2937/fbbf24?text=Webminal.org",
+        imageAlt: "Webminal Terminal",
+        items: [
+          "Volete fare pratica subito senza installare nulla?",
+          "Webminal (webminal.org) è un terminale Linux gratuito accessibile direttamente dal browser.",
+          "Offre un vero file system, gestione permessi e spazio per salvare i vostri script.",
+          "Compito: Create un account gratuito. Sarà la vostra 'palestra' personale da usare ovunque!"
+        ]
+      },
+      {
+        part: "PARTE 4: IL PRIMO APPROCCIO",
+        title: "L'Alternativa Moderna: WSL",
+        icon: "terminal", iconColor: "text-blue-400",
+        items: [
+          "Se usate Windows, la soluzione migliore oggi si chiama WSL (Windows Subsystem for Linux).",
+          "Permette di avere un vero sistema Ubuntu integrato dentro Windows, senza la pesantezza di VirtualBox.",
+          "È lo standard attuale per chi fa sviluppo web o DevOps.",
+          "Basta aprire PowerShell e digitare un solo comando: 'wsl --install'."
+        ]
+      },
+      {
+        part: "PARTE 4: IL PRIMO APPROCCIO",
+        title: "E i Container? (Docker)",
+        icon: "layers", iconColor: "text-blue-400",
+        image: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Docker_%28container_engine%29_logo.svg",
+        imageAlt: "Logo Docker",
+        items: [
+          "Un'altra opzione popolarissima è l'uso dei Container.",
+          "Docker permette di scaricare e avviare un ambiente Linux isolato in pochi secondi.",
+          "A differenza delle VM tradizionali, non emula l'hardware ma condivide le risorse col vostro PC.",
+          "È un tassello fondamentale nel mondo Cloud moderno."
+        ]
+      },
+      {
+        part: "PARTE 4: IL PRIMO APPROCCIO",
+        title: "Pronti per il Laboratorio?",
+        icon: "play", iconColor: "text-yellow-400",
+        items: [
+          "Fine della teoria!",
+          "Prossimo step: preparare il nostro ambiente di lavoro.",
+          "Attiveremo WSL sui vostri PC Windows o avvieremo il nostro primo container Docker.",
+          "Aprite i terminali!"
+        ]
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function renderSlide() {
+      const slide = slidesData[currentIndex];
+
+      // Re-trigger animation
+      const container = document.getElementById('slide-container');
+      container.classList.remove('animate-fade-in');
+      void container.offsetWidth; // trigger reflow
+      container.classList.add('animate-fade-in');
+
+      // Update text elements
+      document.getElementById('slide-part').textContent = slide.part;
+      document.getElementById('slide-title').textContent = slide.title;
+
+      // Update Icon
+      document.getElementById('slide-icon-container').innerHTML = `<i data-lucide="${slide.icon}" class="w-12 h-12 ${slide.iconColor} mb-4"></i>`;
+
+      // Update Items List
+      const itemsHtml = slide.items.map(item => {
+        const isIndented = /^[123]\.|^•/.test(item);
+        return `
+                    <li class="flex items-start">
+                        <span class="text-green-500 mr-4 mt-1">$</span>
+                        <span class="${isIndented ? 'ml-6' : ''}">${item}</span>
+                    </li>
+                `;
+      }).join('');
+      document.getElementById('slide-items').innerHTML = itemsHtml;
+
+      // Update Image
+      const imgCol = document.getElementById('slide-image-col');
+      if (slide.image) {
+        imgCol.style.display = 'flex';
+        document.getElementById('slide-image').src = slide.image;
+        document.getElementById('slide-image').alt = slide.imageAlt || 'Immagine slide';
+      } else {
+        imgCol.style.display = 'none';
+      }
+
+      // Update Progress Bar
+      const progress = ((currentIndex + 1) / slidesData.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+
+      // Update Footer Text
+      document.getElementById('footer-text').textContent = `root@its-lab:~# slide ${currentIndex + 1} di ${slidesData.length}`;
+
+      // Update Buttons State
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+
+      if (currentIndex === 0) {
+        btnPrev.disabled = true;
+        btnPrev.className = "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed";
+      } else {
+        btnPrev.disabled = false;
+        btnPrev.className = "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white hover:scale-105 active:scale-95";
+      }
+
+      if (currentIndex === slidesData.length - 1) {
+        btnNext.disabled = true;
+        btnNext.className = "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed";
+      } else {
+        btnNext.disabled = false;
+        btnNext.className = "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-green-600 text-white hover:bg-green-500 hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:scale-105 active:scale-95";
+      }
+
+      // Re-initialize icons for the new slide
+      lucide.createIcons();
+    }
+
+    function nextSlide() {
+      if (currentIndex < slidesData.length - 1) {
+        currentIndex++;
+        renderSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderSlide();
+      }
+    }
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+
+    // Initial Render
+    renderSlide();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cheatsheet Comandi Linux - ITS LinuxLab</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    .delay-100 {
+      animation-delay: 100ms;
+    }
+
+    .delay-200 {
+      animation-delay: 200ms;
+    }
+
+    .delay-300 {
+      animation-delay: 300ms;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #111827;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4B5563;
+    }
+
+    /* Stile personalizzato per i blocchi di codice nella cheatsheet */
+    .cmd-block {
+      @apply bg-gray-900 border border-gray-700 rounded-lg p-3 mb-3 hover:border-gray-500 transition-colors;
+    }
+
+    .cmd-syntax {
+      @apply text-green-400 font-mono text-sm block mb-1;
+    }
+
+    .cmd-desc {
+      @apply text-gray-400 text-sm;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 text-gray-100 font-sans selection:bg-green-500 selection:text-white pb-12">
+
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <i data-lucide="terminal" class="w-8 h-8 text-green-500"></i>
+          <span class="font-bold text-xl tracking-tight">ITS <span class="text-green-500">LinuxLab</span></span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="./index.html"
+            class="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Torna alla Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header Section -->
+  <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div>
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-800 border border-gray-700 text-xs text-gray-300 font-mono mb-4">
+          <i data-lucide="file-code-2" class="w-4 h-4 text-green-500"></i>
+          Riferimento Rapido
+        </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight mb-2">
+          Linux <span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Cheatsheet</span>
+        </h1>
+        <p class="text-gray-400">I comandi essenziali da tenere sempre sottomano durante i laboratori.</p>
+      </div>
+
+      <!-- Il comando più importante in evidenza -->
+      <div class="bg-blue-900/20 border border-blue-500/30 rounded-xl p-4 flex items-start gap-4 max-w-sm">
+        <i data-lucide="life-buoy" class="w-8 h-8 text-blue-400 shrink-0"></i>
+        <div>
+          <span class="text-blue-400 font-mono font-bold text-lg block mb-1">man [comando]</span>
+          <p class="text-sm text-gray-300">La "Bibbia". Mostra il manuale ufficiale di qualsiasi comando. Premi <kbd
+              class="bg-gray-800 px-1 rounded text-xs">q</kbd> per uscire.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Cheatsheet Grid -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+
+      <!-- Card 1: Navigazione -->
+      <section class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 animate-fade-in delay-100">
+        <div class="flex items-center gap-3 mb-6">
+          <i data-lucide="folder-tree" class="w-6 h-6 text-green-400"></i>
+          <h2 class="text-xl font-bold text-white">Navigazione (File System)</h2>
+        </div>
+
+        <div class="cmd-block">
+          <span class="cmd-syntax">pwd</span>
+          <p class="cmd-desc">Print Working Directory. Ti dice in quale cartella ti trovi attualmente.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">ls -la</span>
+          <p class="cmd-desc">Elenca il contenuto della cartella. <b>-l</b> formato lungo (dettagli), <b>-a</b> mostra i
+            file nascosti.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">cd /percorso</span>
+          <p class="cmd-desc">Change Directory. Cambia la cartella attuale. <br><code>cd ..</code> sale di un livello.
+            <code>cd ~</code> va nella home.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">mkdir nome_cartella</span>
+          <p class="cmd-desc">Crea una nuova directory (cartella).</p>
+        </div>
+      </section>
+
+      <!-- Card 2: Gestione File -->
+      <section class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 animate-fade-in delay-100">
+        <div class="flex items-center gap-3 mb-6">
+          <i data-lucide="file-edit" class="w-6 h-6 text-yellow-400"></i>
+          <h2 class="text-xl font-bold text-white">Gestione File</h2>
+        </div>
+
+        <div class="cmd-block">
+          <span class="cmd-syntax">touch file.txt</span>
+          <p class="cmd-desc">Crea un file vuoto o aggiorna la data di modifica di un file esistente.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">cp orig.txt dest.txt</span>
+          <p class="cmd-desc">Copia file o directory. Usa <b>-r</b> per copiare intere cartelle.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">mv file.txt /nuova/dir/</span>
+          <p class="cmd-desc">Sposta (o rinomina) file e directory.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">rm file.txt</span>
+          <p class="cmd-desc">Rimuove (cancella) un file. Usa <b>rm -rf</b> per cartelle piene (ATTENZIONE: non si torna
+            indietro!).</p>
+        </div>
+      </section>
+
+      <!-- Card 3: Visualizzazione Testo -->
+      <section class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 animate-fade-in delay-200">
+        <div class="flex items-center gap-3 mb-6">
+          <i data-lucide="eye" class="w-6 h-6 text-purple-400"></i>
+          <h2 class="text-xl font-bold text-white">Lettura File</h2>
+        </div>
+
+        <div class="cmd-block">
+          <span class="cmd-syntax">cat file.txt</span>
+          <p class="cmd-desc">Stampa l'intero contenuto del file sul terminale in un colpo solo.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">less file.txt</span>
+          <p class="cmd-desc">Apre il file in un visualizzatore navigabile (frecce su/giù). Premi <kbd
+              class="bg-gray-800 px-1 rounded text-xs">q</kbd> per uscire.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">head -n 10 file.txt</span>
+          <p class="cmd-desc">Mostra solo le prime 10 righe di un file.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">tail -f /var/log/syslog</span>
+          <p class="cmd-desc">Mostra le ultime righe. L'opzione <b>-f</b> rimane in ascolto e mostra i nuovi
+            aggiornamenti in tempo reale (utile per i log).</p>
+        </div>
+      </section>
+
+      <!-- Card 4: Ricerca e Filtri -->
+      <section class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 animate-fade-in delay-200">
+        <div class="flex items-center gap-3 mb-6">
+          <i data-lucide="search" class="w-6 h-6 text-orange-400"></i>
+          <h2 class="text-xl font-bold text-white">Ricerca & Pipe</h2>
+        </div>
+
+        <div class="cmd-block">
+          <span class="cmd-syntax">grep "errore" file.log</span>
+          <p class="cmd-desc">Cerca la parola specificata all'interno del file testuale.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">find /etc -name "*.conf"</span>
+          <p class="cmd-desc">Cerca all'interno della cartella /etc tutti i file che finiscono per .conf.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">comando1 | comando2</span>
+          <p class="cmd-desc">Il carattere <b>Pipe (|)</b> prende l'output del primo comando e lo passa come input al
+            secondo (es. <code>ls -l | grep "txt"</code>).</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">> e >></span>
+          <p class="cmd-desc">Reindirizzano l'output in un file. <b>></b> sovrascrive il file, <b>>></b> aggiunge alla
+            fine (append).</p>
+        </div>
+      </section>
+
+      <!-- Card 5: Utenti e Permessi -->
+      <section class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 animate-fade-in delay-300">
+        <div class="flex items-center gap-3 mb-6">
+          <i data-lucide="shield" class="w-6 h-6 text-red-400"></i>
+          <h2 class="text-xl font-bold text-white">Sicurezza & Permessi</h2>
+        </div>
+
+        <div class="cmd-block">
+          <span class="cmd-syntax">sudo [comando]</span>
+          <p class="cmd-desc">SuperUser DO. Esegue il comando successivo con i privilegi massimi (amministratore/root).
+          </p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">chmod 755 file.sh</span>
+          <p class="cmd-desc">Modifica i permessi (Lettura, Scrittura, Esecuzione). 755 rende un file eseguibile per il
+            proprietario.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">chown utente:gruppo file</span>
+          <p class="cmd-desc">Cambia il proprietario (user) e il gruppo di un file o cartella.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">passwd utente</span>
+          <p class="cmd-desc">Cambia la password di un utente specifico.</p>
+        </div>
+      </section>
+
+      <!-- Card 6: Sistema e Processi -->
+      <section class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 animate-fade-in delay-300">
+        <div class="flex items-center gap-3 mb-6">
+          <i data-lucide="activity" class="w-6 h-6 text-cyan-400"></i>
+          <h2 class="text-xl font-bold text-white">Sistema & Processi</h2>
+        </div>
+
+        <div class="cmd-block">
+          <span class="cmd-syntax">htop (o top)</span>
+          <p class="cmd-desc">Task manager da terminale. Mostra CPU, RAM e i processi attivi in tempo reale.</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">ps aux</span>
+          <p class="cmd-desc">Genera un'istantanea statica di tutti i processi in esecuzione nel sistema e i loro PID.
+          </p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">kill -9 PID</span>
+          <p class="cmd-desc">Termina forzatamente un processo usando il suo Process ID (PID).</p>
+        </div>
+        <div class="cmd-block">
+          <span class="cmd-syntax">df -h</span>
+          <p class="cmd-desc">Mostra lo spazio su disco utilizzato e libero. <b>-h</b> lo rende leggibile (MB, GB).</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Initialize Icons -->
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+
+</html>
