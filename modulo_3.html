@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corso Linux ITS - Modulo 3</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #terminal-history::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #terminal-history::-webkit-scrollbar-track {
+      background: #111827;
+    }
+
+    #terminal-history::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 4px;
+    }
+
+    #terminal-history::-webkit-scrollbar-thumb:hover {
+      background: #4B5563;
+    }
+
+    #terminal-input:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  </style>
+</head>
+
+<body
+  class="min-h-screen bg-gray-900 text-gray-100 flex flex-col font-sans selection:bg-green-500 selection:text-white">
+
+  <!-- Progress bar -->
+  <div class="w-full h-2 bg-gray-800">
+    <div id="progress-bar" class="h-full bg-green-500 transition-all duration-500 ease-out" style="width: 0%;"></div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex flex-col items-center justify-center p-8 relative">
+    <div class="max-w-5xl w-full">
+
+      <!-- Section Badge -->
+      <div class="mb-6 text-center md:text-left">
+        <span id="slide-part"
+          class="inline-block px-4 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-mono uppercase tracking-wider border border-gray-700"></span>
+      </div>
+
+      <!-- Slide Content Container -->
+      <div id="slide-container"
+        class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 md:p-12 shadow-2xl min-h-[500px] flex flex-col justify-center transform transition-all duration-300">
+
+        <!-- STANDARD LAYOUT -->
+        <div id="standard-layout" class="flex flex-col lg:flex-row gap-8 items-center w-full">
+          <div class="flex-1 w-full">
+            <div class="flex items-center justify-center md:justify-start gap-4 mb-8">
+              <div id="slide-icon-container"></div>
+              <h1 id="slide-title" class="text-3xl md:text-5xl font-bold text-white tracking-tight"></h1>
+            </div>
+            <ul id="slide-items" class="space-y-6 text-lg md:text-2xl text-gray-300"></ul>
+          </div>
+
+          <div id="slide-image-col" class="flex-1 w-full flex justify-center items-center mt-8 lg:mt-0 animate-fade-in"
+            style="display: none;">
+            <div
+              class="relative p-2 bg-gray-800 border border-gray-700 rounded-xl shadow-inner w-full flex justify-center">
+              <img id="slide-image" src="" alt=""
+                class="w-full h-auto max-h-[300px] object-contain rounded-lg bg-white p-2"
+                onerror="this.src='https://placehold.co/600x400/1f2937/10b981?text=Immagine+Non+Trovata'">
+            </div>
+          </div>
+        </div>
+
+        <!-- TERMINAL LAYOUT -->
+        <div id="terminal-layout" class="w-full flex flex-col lg:flex-row gap-8 items-stretch animate-fade-in"
+          style="display: none;">
+
+          <div class="flex-1 w-full lg:w-1/3 flex flex-col justify-center">
+            <div class="flex items-center gap-4 mb-6">
+              <i data-lucide="shield-alert" class="w-10 h-10 text-green-500"></i>
+              <h1 class="text-3xl font-bold text-white">Simulazione</h1>
+            </div>
+            <p class="text-gray-400 mb-6 text-lg">Metti in sicurezza il tuo script eseguendo i task in ordine:</p>
+            <ol class="space-y-3 text-gray-300 text-lg list-decimal list-inside ml-2">
+              <li>Crea uno script vuoto: <code class="text-green-400 bg-gray-900 px-1 rounded">touch script.sh</code>
+              </li>
+              <li>Controlla i suoi permessi base (<code
+                  class="text-green-400 bg-gray-900 px-1 rounded">ls -l script.sh</code>)</li>
+              <li>Rendilo eseguibile usando l'ottale <code class="text-green-400 bg-gray-900 px-1 rounded">755</code>
+              </li>
+              <li>Verifica il cambiamento (<code class="text-green-400 bg-gray-900 px-1 rounded">ls -l script.sh</code>)
+              </li>
+              <li>Usa i permessi di superutente per cederlo a root: <code
+                  class="text-green-400 bg-gray-900 px-1 rounded">sudo chown root script.sh</code></li>
+              <li>Verifica il nuovo proprietario (<code
+                  class="text-green-400 bg-gray-900 px-1 rounded">ls -l script.sh</code>)</li>
+            </ol>
+          </div>
+
+          <div
+            class="flex-1 w-full lg:w-2/3 bg-gray-950 border border-gray-700 rounded-xl overflow-hidden shadow-inner flex flex-col font-mono text-sm md:text-base cursor-text"
+            onclick="document.getElementById('terminal-input').focus();">
+            <div class="bg-gray-800 px-4 py-2 flex items-center border-b border-gray-700">
+              <div class="flex gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+              </div>
+              <div class="mx-auto text-gray-400 text-xs">studente@its-lab: ~</div>
+            </div>
+
+            <div class="p-4 flex-grow flex flex-col h-[350px]">
+              <div id="terminal-history" class="flex-grow overflow-y-auto mb-2 text-gray-300 pr-2 space-y-1">
+                <div class="text-green-400 mb-4">
+                  Simulatore Permessi ITS LinuxLab.<br>
+                  Digita i comandi qui sotto e premi Invio.
+                </div>
+              </div>
+
+              <div class="flex items-center text-gray-300">
+                <span id="terminal-prompt" class="mr-2 text-green-400 whitespace-nowrap">studente@its-lab:~$</span>
+                <input type="text" id="terminal-input"
+                  class="flex-grow bg-transparent border-none text-white font-mono w-full" autocomplete="off"
+                  spellcheck="false" autofocus>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Navigation -->
+  <footer class="p-6 bg-gray-900 border-t border-gray-800 flex items-center justify-between z-10">
+    <button id="btn-prev" onclick="prevSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+      disabled>
+      <i data-lucide="chevron-left" class="w-5 h-5"></i>
+      Precedente
+    </button>
+
+    <div id="footer-text" class="text-gray-500 font-mono text-sm hidden md:block"></div>
+
+    <button id="btn-next" onclick="nextSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-green-600 text-white hover:bg-green-500 hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:scale-105 active:scale-95">
+      Successiva
+      <i data-lucide="chevron-right" class="w-5 h-5"></i>
+    </button>
+  </footer>
+
+  <script>
+    const slidesData = [
+      {
+        part: "MODULO 3: SICUREZZA",
+        title: "Utenti, Gruppi e Permessi",
+        icon: "shield-check", iconColor: "text-purple-400",
+        items: [
+          "Benvenuti nel Modulo 3: La Sicurezza in Linux.",
+          "Linux è un sistema nativamente multi-utente.",
+          "Impareremo a isolare gli ambienti, proteggere i file importanti e delegare poteri speciali in sicurezza."
+        ]
+      },
+      {
+        part: "IDENTITÀ E PRIVILEGI",
+        title: "L'onnipotente 'root'",
+        icon: "crown", iconColor: "text-red-500",
+        items: [
+          "Root è l'amministratore supremo del sistema. Può fare, leggere e cancellare qualsiasi cosa.",
+          "Lavorare costantemente loggati come root è pericolosissimo.",
+          "Il comando 'su' (Switch User) permette di diventare root o altri utenti.",
+          "Il comando 'sudo' (SuperUser DO) permette a un utente normale di eseguire un singolo comando coi poteri di root temporanei."
+        ]
+      },
+      {
+        part: "IDENTITÀ E PRIVILEGI",
+        title: "Creare Utenti e Gruppi",
+        icon: "users", iconColor: "text-blue-400",
+        items: [
+          "Ogni persona o servizio (es. un database) ha un proprio Utente.",
+          "Gli utenti sono organizzati in Gruppi logici (es. 'sviluppatori', 'admin').",
+          "• sudo useradd nome_utente: Crea l'utente.",
+          "• sudo passwd nome_utente: Assegna o cambia la password.",
+          "• sudo groupadd nome_gruppo: Crea un gruppo vuoto.",
+          "• sudo usermod -aG gruppo utente: Aggiunge un utente a un gruppo esistente."
+        ]
+      },
+      {
+        part: "IL MODELLO DI SICUREZZA",
+        title: "Il Paradigma U.G.O.",
+        icon: "network", iconColor: "text-cyan-400",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/File_permissions_in_Linux.svg/1024px-File_permissions_in_Linux.svg.png",
+        imageAlt: "Permessi Linux UGO",
+        items: [
+          "Ogni file e cartella in Linux ha un set di permessi diviso in tre blocchi applicati a 3 soggetti:",
+          "1. U (User): Il proprietario diretto del file.",
+          "2. G (Group): Gli utenti appartenenti al gruppo associato al file.",
+          "3. O (Others): Tutti gli altri utenti del sistema."
+        ]
+      },
+      {
+        part: "IL MODELLO DI SICUREZZA",
+        title: "Leggere, Scrivere, Eseguire (RWX)",
+        icon: "file-key", iconColor: "text-cyan-400",
+        items: [
+          "Cosa possono fare User, Group e Others?",
+          "• R (Read): Leggere il contenuto di un file o l'elenco di una directory.",
+          "• W (Write): Modificare o cancellare un file, o aggiungere file in una directory.",
+          "• X (Execute): Lanciare un file come programma, o 'entrare' in una directory con 'cd'.",
+          "Esempio output 'ls -l': -rwxr-xr-- significa che User ha tutto, Group legge ed esegue, Others solo legge."
+        ]
+      },
+      {
+        part: "MODIFICA PERMESSI",
+        title: "Notazione Simbolica (chmod)",
+        icon: "lock-open", iconColor: "text-green-400",
+        items: [
+          "Il comando 'chmod' (Change Mode) modifica i permessi (RWX).",
+          "La notazione simbolica usa le lettere u, g, o unite a +, -, =.",
+          "• chmod u+x file.sh : Aggiunge esecuzione al proprietario.",
+          "• chmod g-w file.txt : Toglie scrittura al gruppo.",
+          "• chmod o=r file.txt : Imposta esattamente solo la lettura per gli altri."
+        ]
+      },
+      {
+        part: "MODIFICA PERMESSI",
+        title: "Notazione Ottale (La Magia dei Numeri)",
+        icon: "binary", iconColor: "text-green-400",
+        items: [
+          "I professionisti usano i numeri (sistema ottale) per essere rapidissimi:",
+          "R = 4 | W = 2 | X = 1. Si sommano i valori per ottenere il blocco.",
+          "• 7 (4+2+1) = RWX (Tutti i permessi)",
+          "• 6 (4+2) = RW- (Legge e scrive)",
+          "• 5 (4+1) = R-X (Legge ed esegue)",
+          "Esempio classico: 'chmod 755 file.sh' = User:7 (RWX), Group:5 (R-X), Others:5 (R-X)."
+        ]
+      },
+      {
+        part: "MODIFICA PROPRIETÀ",
+        title: "I Comandi chown e chgrp",
+        icon: "user-check", iconColor: "text-yellow-400",
+        items: [
+          "I permessi regolano *cosa* puoi fare. Ma *chi* è il padrone del file?",
+          "• sudo chown nuovo_utente file.txt : Cambia il proprietario (Change Owner).",
+          "• sudo chgrp nuovo_gruppo file.txt : Cambia il gruppo proprietario.",
+          "Combo 2 in 1: 'sudo chown utente:gruppo file.txt' cambia entrambi in un colpo solo."
+        ]
+      },
+      {
+        part: "PRATICA IN LABORATORIO",
+        title: "Esercitazione: Regole d'Ingaggio",
+        icon: "clipboard-list", iconColor: "text-emerald-400",
+        items: [
+          "Task 1: Crea un file di testo che fungerà da script.",
+          "Task 2: Verifica i permessi di base che gli vengono assegnati di default.",
+          "Task 3: Modifica i permessi usando la notazione ottale (755) in modo da renderlo eseguibile.",
+          "Task 4: Assumi i privilegi da superutente e trasferisci la proprietà del file a 'root'.",
+          "Aprite i terminali!"
+        ]
+      },
+      {
+        part: "PRATICA IN LABORATORIO",
+        isTerminal: true
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function renderSlide() {
+      const slide = slidesData[currentIndex];
+      const container = document.getElementById('slide-container');
+      const standardLayout = document.getElementById('standard-layout');
+      const terminalLayout = document.getElementById('terminal-layout');
+
+      container.classList.remove('animate-fade-in');
+      void container.offsetWidth;
+      container.classList.add('animate-fade-in');
+
+      document.getElementById('slide-part').textContent = slide.part;
+      document.getElementById('footer-text').textContent = `root@its-lab:~# slide ${currentIndex + 1} di ${slidesData.length}`;
+
+      if (slide.isTerminal) {
+        standardLayout.style.display = 'none';
+        terminalLayout.style.display = 'flex';
+        setTimeout(() => document.getElementById('terminal-input').focus(), 100);
+      } else {
+        standardLayout.style.display = 'flex';
+        terminalLayout.style.display = 'none';
+
+        document.getElementById('slide-title').textContent = slide.title;
+        document.getElementById('slide-icon-container').innerHTML = `<i data-lucide="${slide.icon}" class="w-12 h-12 ${slide.iconColor} mb-4"></i>`;
+
+        const itemsHtml = slide.items.map(item => {
+          const isIndented = /^[123]\.|^Task|^•/.test(item);
+          return `
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-4 mt-1">$</span>
+                            <span class="${isIndented ? 'ml-6' : ''}">${item}</span>
+                        </li>
+                    `;
+        }).join('');
+        document.getElementById('slide-items').innerHTML = itemsHtml;
+
+        const imgCol = document.getElementById('slide-image-col');
+        if (slide.image) {
+          imgCol.style.display = 'flex';
+          document.getElementById('slide-image').src = slide.image;
+          document.getElementById('slide-image').alt = slide.imageAlt || 'Immagine slide';
+        } else {
+          imgCol.style.display = 'none';
+        }
+      }
+
+      const progress = ((currentIndex + 1) / slidesData.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+
+      btnPrev.disabled = currentIndex === 0;
+      btnPrev.className = currentIndex === 0
+        ? "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+        : "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white hover:scale-105 active:scale-95";
+
+      btnNext.disabled = currentIndex === slidesData.length - 1;
+      btnNext.className = currentIndex === slidesData.length - 1
+        ? "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+        : "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-green-600 text-white hover:bg-green-500 hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:scale-105 active:scale-95";
+
+      lucide.createIcons();
+    }
+
+    function nextSlide() {
+      if (currentIndex < slidesData.length - 1) {
+        currentIndex++;
+        renderSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderSlide();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName.toLowerCase() === 'input') return;
+      if (e.key === 'ArrowRight') nextSlide();
+      else if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    // ==========================================
+    // LOGICA DEL FINTO TERMINALE MODULO 3
+    // ==========================================
+    const termInput = document.getElementById("terminal-input");
+    const termHistory = document.getElementById("terminal-history");
+
+    let currentStep = 0;
+    let todayDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+
+    const steps = [
+      { expected: ["touch script.sh", "touch ./script.sh"], output: "" },
+      { expected: ["ls -l script.sh", "ls -l"], output: `-rw-r--r-- 1 studente studente 0 ${todayDate} 10:00 script.sh` },
+      { expected: ["chmod 755 script.sh", "chmod +x script.sh", "chmod u+x script.sh"], output: "" },
+      { expected: ["ls -l script.sh", "ls -l"], output: `-rwxr-xr-x 1 studente studente 0 ${todayDate} 10:01 script.sh<br><span class='text-gray-400'>Il file è ora eseguibile (notare la 'x').</span>` },
+      { expected: ["sudo chown root script.sh", "sudo chown root:root script.sh"], output: `[sudo] password for studente: <br><span class='text-gray-400'>(Simulazione: password accettata)</span>` },
+      { expected: ["ls -l script.sh", "ls -l"], output: `-rwxr-xr-x 1 root studente 0 ${todayDate} 10:02 script.sh<br><span class='text-green-400 font-bold'>Missione Completata!</span>` }
+    ];
+
+    termInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        let cmd = termInput.value.trim().replace(/\s+/g, ' ');
+        if (!cmd) return;
+
+        termHistory.innerHTML += `<div><span class="text-green-400">studente@its-lab:~$</span> <span class="text-white">${cmd}</span></div>`;
+
+        if (currentStep < steps.length) {
+          let match = steps[currentStep].expected.includes(cmd);
+
+          if (match) {
+            if (steps[currentStep].output) {
+              termHistory.innerHTML += `<div class="text-gray-300">${steps[currentStep].output}</div>`;
+            }
+            currentStep++;
+          } else {
+            if (cmd.includes("rm") || cmd.includes("sudo rm")) {
+              termHistory.innerHTML += `<div class="text-red-500 font-bold">In questo scenario non devi cancellare nulla. Riprova.</div>`;
+            } else {
+              termHistory.innerHTML += `<div class="text-red-400">Errore: Comando non valido o fuori sequenza. Controlla le istruzioni a sinistra.</div>`;
+            }
+          }
+        } else {
+          termHistory.innerHTML += `<div class="text-gray-400">Esercitazione terminata.</div>`;
+        }
+
+        termInput.value = "";
+        termHistory.scrollTop = termHistory.scrollHeight;
+      }
+    });
+
+    renderSlide();
+  </script>
+</body>
+
+</html>
