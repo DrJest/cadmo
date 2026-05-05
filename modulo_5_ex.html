@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio Modulo 5 - ITS LinuxLab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    .delay-100 {
+      animation-delay: 100ms;
+    }
+
+    .delay-200 {
+      animation-delay: 200ms;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #111827;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4B5563;
+    }
+
+    /* Stili per il Quiz */
+    .quiz-option {
+      @apply flex items-center p-4 border border-gray-700 rounded-lg cursor-pointer bg-gray-800/50 hover:bg-gray-800 transition-colors mb-3;
+    }
+
+    .quiz-option.selected {
+      @apply border-red-500 bg-red-900/20 ring-1 ring-red-500;
+    }
+
+    .quiz-option.correct {
+      @apply border-green-500 bg-green-900/20 ring-1 ring-green-500;
+    }
+
+    .quiz-option.wrong {
+      @apply border-red-500 bg-red-900/20 ring-1 ring-red-500 opacity-70;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 text-gray-100 font-sans selection:bg-red-500 selection:text-white">
+
+  <nav class="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <i data-lucide="terminal" class="w-8 h-8 text-red-500"></i>
+          <span class="font-bold text-xl tracking-tight">ITS <span class="text-red-500">LinuxLab</span></span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="./" class="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Torna alla Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-gray-950 border-b border-gray-800 py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-900/30 border border-red-500/30 text-xs text-red-400 font-mono mb-4 uppercase tracking-wider">
+        <i data-lucide="activity" class="w-4 h-4"></i> System Performance
+      </div>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Esercitazioni Modulo 5</h1>
+      <p class="text-gray-400 text-lg">Individuazione processi bloccati, gestione del background e analisi delle risorse
+        hardware.</p>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <section class="animate-fade-in delay-100">
+      <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
+        <i data-lucide="book-open" class="w-6 h-6 text-red-400"></i>
+        <h2 class="text-2xl font-bold text-white">1. Guida Rapida: Diagnostica</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700">
+          <h3 class="text-lg font-bold text-red-400 mb-2">Processi: Trovare e Terminare</h3>
+          <p class="text-gray-400 text-sm mb-3">Identifica un programma tramite il suo nome e forza la chiusura.</p>
+          <div class="font-mono text-sm bg-gray-900 p-3 rounded border border-gray-700 text-gray-300">
+            <span class="text-red-400">$</span> ps aux | grep firefox<br>
+            <span class="text-gray-500"># kill -9 [PID]</span><br>
+            <span class="text-red-400">$</span> kill -9 1234
+          </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700">
+          <h3 class="text-lg font-bold text-yellow-400 mb-2">Hardware: RAM e Dischi</h3>
+          <p class="text-gray-400 text-sm mb-3">Controlla se il server sta finendo le risorse vitali.</p>
+          <div class="font-mono text-sm bg-gray-900 p-3 rounded border border-gray-700 text-gray-300">
+            <span class="text-gray-500"># RAM in formato leggibile</span><br>
+            <span class="text-red-400">$</span> free -h<br>
+            <span class="text-gray-500"># Spazio partizioni</span><br>
+            <span class="text-red-400">$</span> df -h
+          </div>
+        </div>
+
+        <div
+          class="bg-gray-800 rounded-xl p-5 border border-gray-700 md:col-span-2 flex flex-col md:flex-row gap-6 items-center">
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-cyan-400 mb-2">Multitasking: Background (&)</h3>
+            <p class="text-gray-400 text-sm mb-3">Lancia comandi lunghi senza bloccare il terminale attuale.</p>
+          </div>
+          <div class="flex-1 w-full font-mono text-sm bg-gray-900 p-3 rounded border border-cyan-900/50 text-gray-300">
+            <span class="text-gray-500"># Esegue comando in sottofondo</span><br>
+            <span class="text-red-400">$</span> sleep 100 &<br>
+            <span class="text-gray-500"># Vedi lavori attivi e riportali in fg</span><br>
+            <span class="text-red-400">$</span> jobs<br>
+            <span class="text-red-400">$</span> fg 1
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="animate-fade-in delay-200">
+      <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
+        <i data-lucide="target" class="w-6 h-6 text-orange-400"></i>
+        <h2 class="text-2xl font-bold text-white">2. Missioni sul Terminale Reale</h2>
+      </div>
+      <p class="text-gray-400 mb-6">Usa il tuo terminale WSL o Linux per simulare questi carichi di lavoro.</p>
+
+      <div class="space-y-6">
+        <div class="relative pl-8 border-l-2 border-red-500">
+          <div class="absolute -left-[11px] top-0 bg-gray-900 p-1">
+            <div class="w-4 h-4 rounded-full bg-red-500"></div>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Missione Alpha: Lo Stregone del Background</h3>
+          <ul class="list-decimal list-inside text-gray-300 space-y-2 marker:text-red-500">
+            <li>Lancia il comando <code class="text-red-300 bg-gray-800 px-1 rounded">sleep 300</code> in background
+              aggiungendo <code class="text-red-300 bg-gray-800 px-1 rounded">&</code> alla fine.</li>
+            <li>Lancia un secondo comando <code class="text-red-300 bg-gray-800 px-1 rounded">sleep 400 &</code> sempre
+              in background.</li>
+            <li>Usa il comando <code class="text-red-300 bg-gray-800 px-1 rounded">jobs</code> per verificare che
+              entrambi siano attivi.</li>
+            <li>Usa <code class="text-red-300 bg-gray-800 px-1 rounded">ps aux | grep sleep</code> per vedere i loro PID
+              assegnati dal sistema.</li>
+            <li>Usa il comando <code class="text-red-300 bg-gray-800 px-1 rounded">killall sleep</code> per terminarli
+              tutti istantaneamente.</li>
+          </ul>
+        </div>
+
+        <div class="relative pl-8 border-l-2 border-red-500">
+          <div class="absolute -left-[11px] top-0 bg-gray-900 p-1">
+            <div class="w-4 h-4 rounded-full bg-red-500"></div>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Missione Beta: Analisi di Occupazione</h3>
+          <ul class="list-decimal list-inside text-gray-300 space-y-2 marker:text-red-500">
+            <li>Apri il monitor interattivo lanciando <code class="text-red-300 bg-gray-800 px-1 rounded">top</code> (o
+              <code class="text-red-300 bg-gray-800 px-1 rounded">htop</code> se installato).</li>
+            <li>Osserva qual è il processo che sta usando più memoria in questo momento. Premi 'q' per uscire.</li>
+            <li>Usa il comando <code class="text-red-300 bg-gray-800 px-1 rounded">df -h</code> e identifica quale
+              partizione del disco è la più piena.</li>
+            <li>Vai nella tua home directory e usa <code class="text-red-300 bg-gray-800 px-1 rounded">du -sh</code> per
+              scoprire quanto spazio occupa complessivamente la tua cartella utente.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="animate-fade-in delay-200">
+      <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
+        <i data-lucide="check-square" class="w-6 h-6 text-green-400"></i>
+        <h2 class="text-2xl font-bold text-white">3. Quiz di Verifica: Gestione Risorse</h2>
+      </div>
+
+      <div id="quiz-container" class="bg-gray-950 border border-gray-700 rounded-xl p-6 md:p-8 shadow-lg">
+        <div id="questions-wrapper"></div>
+
+        <div class="mt-8 flex justify-between items-center border-t border-gray-800 pt-6">
+          <div id="quiz-feedback" class="text-lg font-bold hidden"></div>
+          <button id="submit-quiz" onclick="checkQuiz()"
+            class="bg-red-600 hover:bg-red-500 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 ml-auto">
+            <i data-lucide="send" class="w-5 h-5"></i> Valuta Risposte
+          </button>
+          <button id="retry-quiz" onclick="resetQuiz()"
+            class="hidden bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors ml-auto">
+            Riprova
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-gray-800 py-8 bg-gray-900 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm font-mono">
+      root@its-lab:~# end_module_5
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    const quizData = [
+      {
+        question: "1. Cos'è il PID (Process ID) in Linux?",
+        options: [
+          "Il nome abbreviato di un programma.",
+          "Un numero unico che identifica un processo in esecuzione.",
+          "La password necessaria per avviare un software.",
+          "La priorità assegnata alla CPU."
+        ],
+        correct: 1,
+        explanation: "Il <strong>PID</strong> è la 'targa' del processo: serve al Kernel per sapere esattamente a quale programma inviare segnali o risorse."
+      },
+      {
+        question: "2. Qual è la differenza tra il segnale standard di kill e 'kill -9'?",
+        options: [
+          "'kill -9' è più lento.",
+          "'kill' chiede gentilmente di chiudersi, '-9' forza la terminazione immediata scavalcando il processo.",
+          "Non c'è differenza.",
+          "'-9' serve solo per i processi di root."
+        ],
+        correct: 1,
+        explanation: "Il segnale 9 (SIGKILL) non può essere ignorato o gestito dal processo: il Kernel lo chiude istantaneamente."
+      },
+      {
+        question: "3. Come si mette un comando in background direttamente all'avvio?",
+        options: [
+          "Aggiungendo il simbolo '%' all'inizio.",
+          "Premendo Ctrl+C.",
+          "Aggiungendo il simbolo '&' alla fine del comando.",
+          "Scrivendo 'background' prima del comando."
+        ],
+        correct: 2,
+        explanation: "Il simbolo <strong>&</strong> dice alla shell di non aspettare la fine del comando e restituire subito il prompt all'utente."
+      },
+      {
+        question: "4. Quale comando useresti per vedere quanta RAM libera ha il sistema in GigaByte?",
+        options: [
+          "ram -show",
+          "free -h",
+          "df -h",
+          "top -ram"
+        ],
+        correct: 1,
+        explanation: "<strong>free</strong> mostra la memoria, e il flag <strong>-h</strong> (human-readable) la formatta in unità comprensibili (GB, MB)."
+      },
+      {
+        question: "5. Se vedi un 'Load Average' molto alto nel comando top, cosa sta succedendo?",
+        options: [
+          "Il disco è quasi pieno.",
+          "La CPU o il sistema di I/O sono sovraccarichi di lavoro.",
+          "La connessione internet è lenta.",
+          "Ci sono troppi utenti loggati."
+        ],
+        correct: 1,
+        explanation: "Il <strong>Load Average</strong> indica quanti processi sono in coda in attesa di essere serviti dalla CPU o dal disco."
+      }
+    ];
+
+    let userAnswers = new Array(quizData.length).fill(null);
+
+    function renderQuiz() {
+      const wrapper = document.getElementById('questions-wrapper');
+      wrapper.innerHTML = '';
+
+      quizData.forEach((q, qIndex) => {
+        const qBlock = document.createElement('div');
+        qBlock.className = 'mb-8 last:mb-0';
+
+        const qTitle = document.createElement('h3');
+        qTitle.className = 'text-xl font-bold text-white mb-4';
+        qTitle.textContent = q.question;
+        qBlock.appendChild(qTitle);
+
+        const optionsGrid = document.createElement('div');
+        optionsGrid.className = 'space-y-2';
+
+        q.options.forEach((opt, oIndex) => {
+          const optDiv = document.createElement('div');
+          optDiv.className = 'quiz-option';
+          optDiv.id = `q${qIndex}-o${oIndex}`;
+
+          optDiv.innerHTML = `
+                        <div class="w-5 h-5 rounded-full border-2 border-gray-500 mr-4 flex items-center justify-center indicator">
+                            <div class="w-2.5 h-2.5 rounded-full bg-red-500 hidden inner-dot"></div>
+                        </div>
+                        <span class="text-gray-200">${opt}</span>
+                    `;
+
+          optDiv.onclick = () => selectOption(qIndex, oIndex);
+          optionsGrid.appendChild(optDiv);
+        });
+
+        qBlock.appendChild(optionsGrid);
+
+        const expDiv = document.createElement('div');
+        expDiv.id = `exp-${qIndex}`;
+        expDiv.className = 'hidden mt-3 p-4 rounded-lg bg-gray-800 border border-gray-700 text-gray-300 text-sm';
+        expDiv.innerHTML = `<i data-lucide="info" class="w-4 h-4 inline mr-2 text-red-400"></i>${q.explanation}`;
+        qBlock.appendChild(expDiv);
+
+        wrapper.appendChild(qBlock);
+      });
+      lucide.createIcons();
+    }
+
+    function selectOption(qIndex, oIndex) {
+      if (document.getElementById('submit-quiz').classList.contains('hidden')) return;
+      userAnswers[qIndex] = oIndex;
+
+      for (let i = 0; i < quizData[qIndex].options.length; i++) {
+        const el = document.getElementById(`q${qIndex}-o${i}`);
+        el.classList.remove('selected');
+        el.querySelector('.inner-dot').classList.add('hidden');
+        el.querySelector('.indicator').classList.remove('border-red-500');
+      }
+
+      const selectedEl = document.getElementById(`q${qIndex}-o${oIndex}`);
+      selectedEl.classList.add('selected');
+      selectedEl.querySelector('.inner-dot').classList.remove('hidden');
+      selectedEl.querySelector('.indicator').classList.add('border-red-500');
+    }
+
+    function checkQuiz() {
+      if (userAnswers.includes(null)) {
+        const feedback = document.getElementById('quiz-feedback');
+        feedback.innerHTML = '<span class="text-yellow-500">Analisi incompleta! Rispondi a tutto.</span>';
+        feedback.classList.remove('hidden');
+        setTimeout(() => feedback.classList.add('hidden'), 3000);
+        return;
+      }
+
+      let score = 0;
+      quizData.forEach((q, qIndex) => {
+        const selectedOpt = userAnswers[qIndex];
+        const correctOpt = q.correct;
+        document.getElementById(`exp-${qIndex}`).classList.remove('hidden');
+        if (selectedOpt === correctOpt) {
+          score++;
+          document.getElementById(`q${qIndex}-o${selectedOpt}`).classList.add('correct');
+          document.getElementById(`q${qIndex}-o${selectedOpt}`).classList.remove('selected');
+        } else {
+          document.getElementById(`q${qIndex}-o${selectedOpt}`).classList.add('wrong');
+          document.getElementById(`q${qIndex}-o${correctOpt}`).classList.add('correct');
+        }
+      });
+
+      document.getElementById('submit-quiz').classList.add('hidden');
+      document.getElementById('retry-quiz').classList.remove('hidden');
+      const feedback = document.getElementById('quiz-feedback');
+      feedback.classList.remove('hidden');
+
+      if (score === quizData.length) {
+        feedback.innerHTML = `<span class="text-green-500">Ottimo! Punteggio: ${score}/${quizData.length}. Sei un Sysadmin esperto.</span>`;
+      } else {
+        feedback.innerHTML = `<span class="text-red-500">Punteggio: ${score}/${quizData.length}. Rileggi la guida alla diagnostica.</span>`;
+      }
+    }
+
+    function resetQuiz() {
+      userAnswers = new Array(quizData.length).fill(null);
+      document.getElementById('submit-quiz').classList.remove('hidden');
+      document.getElementById('retry-quiz').classList.add('hidden');
+      document.getElementById('quiz-feedback').classList.add('hidden');
+      renderQuiz();
+    }
+
+    renderQuiz();
+  </script>
+</body>
+
+</html>

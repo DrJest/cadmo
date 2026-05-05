@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corso Linux ITS - Modulo 5</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #terminal-history::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #terminal-history::-webkit-scrollbar-track {
+      background: #111827;
+    }
+
+    #terminal-history::-webkit-scrollbar-thumb {
+      background: #4B5563;
+      border-radius: 4px;
+    }
+
+    #terminal-history::-webkit-scrollbar-thumb:hover {
+      background: #9CA3AF;
+    }
+
+    #terminal-input:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 text-gray-100 flex flex-col font-sans selection:bg-red-500 selection:text-white">
+
+  <!-- Progress bar -->
+  <div class="w-full h-2 bg-gray-800">
+    <div id="progress-bar" class="h-full bg-red-500 transition-all duration-500 ease-out" style="width: 0%;"></div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex flex-col items-center justify-center p-8 relative">
+    <div class="max-w-5xl w-full">
+
+      <!-- Section Badge -->
+      <div class="mb-6 text-center md:text-left">
+        <span id="slide-part"
+          class="inline-block px-4 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-mono uppercase tracking-wider border border-gray-700"></span>
+      </div>
+
+      <!-- Slide Content Container -->
+      <div id="slide-container"
+        class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 md:p-12 shadow-2xl min-h-[500px] flex flex-col justify-center transform transition-all duration-300">
+
+        <!-- STANDARD LAYOUT -->
+        <div id="standard-layout" class="flex flex-col lg:flex-row gap-8 items-center w-full">
+          <div class="flex-1 w-full">
+            <div class="flex items-center justify-center md:justify-start gap-4 mb-8">
+              <div id="slide-icon-container"></div>
+              <h1 id="slide-title" class="text-3xl md:text-5xl font-bold text-white tracking-tight"></h1>
+            </div>
+            <ul id="slide-items" class="space-y-6 text-lg md:text-2xl text-gray-300"></ul>
+          </div>
+
+          <div id="slide-image-col" class="flex-1 w-full flex justify-center items-center mt-8 lg:mt-0 animate-fade-in"
+            style="display: none;">
+            <div
+              class="relative p-2 bg-gray-800 border border-gray-700 rounded-xl shadow-inner w-full flex justify-center">
+              <img id="slide-image" src="" alt=""
+                class="w-full h-auto max-h-[300px] object-contain rounded-lg bg-white p-2"
+                onerror="this.src='https://placehold.co/600x400/1f2937/10b981?text=Immagine+Non+Trovata'">
+            </div>
+          </div>
+        </div>
+
+        <!-- TERMINAL LAYOUT -->
+        <div id="terminal-layout" class="w-full flex flex-col lg:flex-row gap-8 items-stretch animate-fade-in"
+          style="display: none;">
+
+          <div class="flex-1 w-full lg:w-1/3 flex flex-col justify-center">
+            <div class="flex items-center gap-4 mb-6">
+              <i data-lucide="activity" class="w-10 h-10 text-red-500"></i>
+              <h1 class="text-3xl font-bold text-white">Simulazione</h1>
+            </div>
+            <p class="text-gray-400 mb-6 text-lg">Un processo chiamato "script_bloccato" sta consumando troppa CPU.
+              Trovalo e distruggilo!</p>
+            <ol class="space-y-3 text-gray-300 text-lg list-decimal list-inside ml-2">
+              <li>Controlla la RAM libera prima dell'intervento: <code
+                  class="text-red-400 bg-gray-900 px-1 rounded">free -h</code></li>
+              <li>Elenca i processi e filtra per trovare il colpevole: <code
+                  class="text-red-400 bg-gray-900 px-1 rounded">ps aux | grep script_bloccato</code></li>
+              <li>Identifica il PID numerico nell'output.</li>
+              <li>Termina brutalmente il processo: <code
+                  class="text-red-400 bg-gray-900 px-1 rounded">kill -9 [NUMERO_PID]</code></li>
+              <li>Verifica il recupero della RAM: <code class="text-red-400 bg-gray-900 px-1 rounded">free -h</code>
+              </li>
+            </ol>
+          </div>
+
+          <div
+            class="flex-1 w-full lg:w-2/3 bg-gray-950 border border-gray-700 rounded-xl overflow-hidden shadow-inner flex flex-col font-mono text-sm md:text-base cursor-text"
+            onclick="document.getElementById('terminal-input').focus();">
+            <div class="bg-gray-800 px-4 py-2 flex items-center border-b border-gray-700">
+              <div class="flex gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+              </div>
+              <div class="mx-auto text-gray-400 text-xs">studente@its-lab: ~</div>
+            </div>
+
+            <div class="p-4 flex-grow flex flex-col h-[350px]">
+              <div id="terminal-history" class="flex-grow overflow-y-auto mb-2 text-gray-300 pr-2 space-y-1">
+                <div class="text-red-400 mb-4">
+                  Simulatore Processi ITS LinuxLab.<br>
+                  Digita i comandi qui sotto e premi Invio.
+                </div>
+              </div>
+
+              <div class="flex items-center text-gray-300">
+                <span id="terminal-prompt" class="mr-2 text-red-400 whitespace-nowrap">studente@its-lab:~$</span>
+                <input type="text" id="terminal-input"
+                  class="flex-grow bg-transparent border-none text-white font-mono w-full" autocomplete="off"
+                  spellcheck="false" autofocus>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Navigation -->
+  <footer class="p-6 bg-gray-900 border-t border-gray-800 flex items-center justify-between z-10">
+    <button id="btn-prev" onclick="prevSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+      disabled>
+      <i data-lucide="chevron-left" class="w-5 h-5"></i>
+      Precedente
+    </button>
+
+    <div id="footer-text" class="text-gray-500 font-mono text-sm hidden md:block"></div>
+
+    <button id="btn-next" onclick="nextSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-red-600 text-white hover:bg-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] hover:scale-105 active:scale-95">
+      Successiva
+      <i data-lucide="chevron-right" class="w-5 h-5"></i>
+    </button>
+  </footer>
+
+  <script>
+    const slidesData = [
+      {
+        part: "MODULO 5: MONITORAGGIO",
+        title: "Il Cuore del Sistema",
+        icon: "activity", iconColor: "text-red-500",
+        items: [
+          "Benvenuti nel Modulo 5: Monitoraggio e Gestione dei Processi.",
+          "Ogni comando che lanciate, ogni programma che si avvia, diventa un 'Processo'.",
+          "Impareremo a leggere i segni vitali della macchina, trovare i colli di bottiglia e terminare i programmi bloccati."
+        ]
+      },
+      {
+        part: "ANATOMIA DI UN PROCESSO",
+        title: "La targa identificativa: PID",
+        icon: "hash", iconColor: "text-red-400",
+        items: [
+          "Il sistema operativo non chiama i programmi per nome, ma usa un numero univoco.",
+          "PID = Process ID (Identificativo del Processo).",
+          "Quando un processo muore o viene chiuso, il suo PID viene liberato e riassegnato in futuro.",
+          "Il processo con PID 1 è l'iniziatore di tutto il sistema (init o systemd)."
+        ]
+      },
+      {
+        part: "MONITORAGGIO DINAMICO",
+        title: "top e htop",
+        icon: "gauge", iconColor: "text-yellow-400",
+        items: [
+          "Vogliamo vedere cosa succede in tempo reale (come il Task Manager di Windows).",
+          "• top: Il comando classico, presente su tutte le macchine Linux. Aggiorna lo schermo ogni 3 secondi.",
+          "• htop: L'evoluzione colorata e interattiva. Permette di scorrere, filtrare e killare i processi facilmente usando F9.",
+          "Guarda sempre la prima riga: ti indica il Load Average (carico medio) della CPU!"
+        ]
+      },
+      {
+        part: "FOTOGRAFARE I PROCESSI",
+        title: "L'istantanea: ps",
+        icon: "camera", iconColor: "text-red-400",
+        items: [
+          "A differenza di top, 'ps' scatta una fotografia statica dei processi attivi in quel preciso millisecondo.",
+          "Il comando più utilizzato dai sysadmin è la combinazione:",
+          "• ps aux : Mostra TUTTI i processi di TUTTI gli utenti con dettagli completi (CPU%, MEM%).",
+          "Si usa quasi sempre in combinazione con il pipe: 'ps aux | grep nome_programma' per trovare subito il PID di un'app specifica."
+        ]
+      },
+      {
+        part: "BACKGROUND E FOREGROUND",
+        title: "Lavorare dietro le quinte",
+        icon: "monitor-play", iconColor: "text-cyan-400",
+        items: [
+          "Se lanci un comando lungo, il terminale rimane bloccato finché non finisce.",
+          "• Simbolo '&' : Mettendolo alla fine del comando (es. 'tar -czf backup.tar.gz /var &'), il processo parte in background liberando il terminale.",
+          "• Comando 'jobs' : Mostra i processi in background.",
+          "• Comando 'fg 1' : Riporta in Foreground (in primo piano) il job numero 1."
+        ]
+      },
+      {
+        part: "IL RUOLO DEL SICARIO",
+        title: "Uccidere i processi: kill",
+        icon: "skull", iconColor: "text-red-500",
+        items: [
+          "Quando un processo non risponde, dobbiamo forzarne la chiusura usando il suo PID.",
+          "• kill 1234 : Chiede gentilmente al processo 1234 di chiudersi (invia il segnale SIGTERM). Il processo può rifiutarsi.",
+          "• kill -9 1234 : Terminazione brutale (SIGKILL). Il sistema distrugge istantaneamente il processo. Usare con cautela!",
+          "• killall firefox : Termina tutti i processi che hanno esattamente quel nome (senza sapere il PID)."
+        ]
+      },
+      {
+        part: "SALUTE DELL'HARDWARE",
+        title: "Memoria e Spazio Disco",
+        icon: "hard-drive", iconColor: "text-yellow-400",
+        items: [
+          "Oltre alla CPU, dobbiamo tenere d'occhio la RAM e il disco.",
+          "• free -h : Mostra la RAM totale, usata e libera. Il flag '-h' (human-readable) formatta in MegaByte o GigaByte.",
+          "• df -h : Disk Free. Mostra lo spazio occupato e libero di tutti i dischi e partizioni montate nel sistema.",
+          "• du -sh cartella/ : Disk Usage. Calcola e mostra quanto pesa l'intera cartella specificata."
+        ]
+      },
+      {
+        part: "PRATICA IN LABORATORIO",
+        title: "Esercitazione: Intervento d'Urgenza",
+        icon: "stethoscoope", iconColor: "text-red-500",
+        items: [
+          "Task 1: Controlla lo stato della memoria con 'free -h'. Noterai un consumo anomalo.",
+          "Task 2: Usa 'ps aux' unito a un filtro 'grep' per trovare il PID del programma 'script_bloccato'.",
+          "Task 3: Utilizza il comando 'kill' con l'opzione -9 per terminare brutalmente il processo identificato.",
+          "Task 4: Ricontrolla la RAM per verificare che la risorsa sia stata liberata con successo.",
+          "Aprite i terminali, il server ha bisogno di voi!"
+        ]
+      },
+      {
+        part: "PRATICA IN LABORATORIO",
+        isTerminal: true
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function renderSlide() {
+      const slide = slidesData[currentIndex];
+      const container = document.getElementById('slide-container');
+      const standardLayout = document.getElementById('standard-layout');
+      const terminalLayout = document.getElementById('terminal-layout');
+
+      container.classList.remove('animate-fade-in');
+      void container.offsetWidth;
+      container.classList.add('animate-fade-in');
+
+      document.getElementById('slide-part').textContent = slide.part;
+      document.getElementById('footer-text').textContent = `root@its-lab:~# slide ${currentIndex + 1} di ${slidesData.length}`;
+
+      if (slide.isTerminal) {
+        standardLayout.style.display = 'none';
+        terminalLayout.style.display = 'flex';
+        setTimeout(() => document.getElementById('terminal-input').focus(), 100);
+      } else {
+        standardLayout.style.display = 'flex';
+        terminalLayout.style.display = 'none';
+
+        document.getElementById('slide-title').textContent = slide.title;
+        document.getElementById('slide-icon-container').innerHTML = `<i data-lucide="${slide.icon}" class="w-12 h-12 ${slide.iconColor} mb-4"></i>`;
+
+        const itemsHtml = slide.items.map(item => {
+          const isIndented = /^[123]\.|^Task|^•/.test(item);
+          return `
+                        <li class="flex items-start">
+                            <span class="text-red-500 mr-4 mt-1">#</span>
+                            <span class="${isIndented ? 'ml-6' : ''}">${item}</span>
+                        </li>
+                    `;
+        }).join('');
+        document.getElementById('slide-items').innerHTML = itemsHtml;
+
+        const imgCol = document.getElementById('slide-image-col');
+        if (slide.image) {
+          imgCol.style.display = 'flex';
+          document.getElementById('slide-image').src = slide.image;
+          document.getElementById('slide-image').alt = slide.imageAlt || 'Immagine slide';
+        } else {
+          imgCol.style.display = 'none';
+        }
+      }
+
+      const progress = ((currentIndex + 1) / slidesData.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+
+      btnPrev.disabled = currentIndex === 0;
+      btnPrev.className = currentIndex === 0
+        ? "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+        : "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white hover:scale-105 active:scale-95";
+
+      btnNext.disabled = currentIndex === slidesData.length - 1;
+      btnNext.className = currentIndex === slidesData.length - 1
+        ? "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+        : "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-red-600 text-white hover:bg-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] hover:scale-105 active:scale-95";
+
+      lucide.createIcons();
+    }
+
+    function nextSlide() {
+      if (currentIndex < slidesData.length - 1) {
+        currentIndex++;
+        renderSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderSlide();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName.toLowerCase() === 'input') return;
+      if (e.key === 'ArrowRight') nextSlide();
+      else if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    // ==========================================
+    // LOGICA DEL FINTO TERMINALE MODULO 5
+    // ==========================================
+    const termInput = document.getElementById("terminal-input");
+    const termHistory = document.getElementById("terminal-history");
+
+    let currentStep = 0;
+    let isKilled = false;
+    const fakePID = "8492";
+
+    const steps = [
+      { expected: ["free -h"], output: `              total        used        free<br>Mem:           16Gi        15Gi       1.0Gi<br><span class='text-yellow-400'>[ATTENZIONE: Memoria in esaurimento]</span>` },
+      { expected: ["ps aux | grep script_bloccato", "ps aux|grep script_bloccato", "ps aux | grep 'script_bloccato'"], output: `studente    ${fakePID}  99.9  85.0 1450000 1350000 ?   R    14:00   0:15 /bin/bash ./script_bloccato.sh<br>studente    8510   0.0   0.0  12300   1000 pts/0 S+   14:05   0:00 grep script_bloccato` },
+      { expected: [`kill -9 ${fakePID}`], output: `<span class='text-gray-400'>[1]+  Killed                  ./script_bloccato.sh</span>` },
+      { expected: ["free -h"], output: `              total        used        free<br>Mem:           16Gi       4.5Gi        11Gi<br><span class='text-green-400 font-bold block mt-2'>Emergenza Rientrata! Ottimo lavoro Sysadmin.</span>` }
+    ];
+
+    termInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        let cmd = termInput.value.trim().replace(/\s+/g, ' ');
+        if (!cmd) return;
+
+        termHistory.innerHTML += `<div><span class="text-red-400">studente@its-lab:~$</span> <span class="text-white">${cmd}</span></div>`;
+
+        if (currentStep < steps.length) {
+          let match = steps[currentStep].expected.includes(cmd);
+
+          if (match) {
+            if (steps[currentStep].output) {
+              termHistory.innerHTML += `<div class="text-gray-300 font-mono whitespace-pre">${steps[currentStep].output}</div>`;
+            }
+            currentStep++;
+          } else {
+            if (cmd.startsWith("kill") && !cmd.includes("-9") && currentStep === 2) {
+              termHistory.innerHTML += `<div class="text-red-500 font-bold">Il processo ignora il tuo comando. Devi forzarne la chiusura con -9!</div>`;
+            } else if (cmd.startsWith("kill -9") && !cmd.includes(fakePID) && currentStep === 2) {
+              termHistory.innerHTML += `<div class="text-red-500 font-bold">PID Errato! Assicurati di copiare il numero esatto dalla colonna PID del comando ps aux.</div>`;
+            } else {
+              termHistory.innerHTML += `<div class="text-red-400">Comando non valido per questo step o fuori sequenza. Controlla la task list.</div>`;
+            }
+          }
+        } else {
+          termHistory.innerHTML += `<div class="text-gray-400">Emergenza risolta. Non ci sono altre azioni richieste.</div>`;
+        }
+
+        termInput.value = "";
+        termHistory.scrollTop = termHistory.scrollHeight;
+      }
+    });
+
+    renderSlide();
+  </script>
+</body>
+
+</html>
