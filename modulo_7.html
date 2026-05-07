@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corso Linux ITS - Modulo 7</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #terminal-history::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #terminal-history::-webkit-scrollbar-track {
+      background: #111827;
+    }
+
+    #terminal-history::-webkit-scrollbar-thumb {
+      background: #f97316;
+      /* orange-500 */
+      border-radius: 4px;
+    }
+
+    #terminal-history::-webkit-scrollbar-thumb:hover {
+      background: #fb923c;
+      /* orange-400 */
+    }
+
+    #terminal-input:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  </style>
+</head>
+
+<body
+  class="min-h-screen bg-gray-900 text-gray-100 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
+
+  <!-- Progress bar -->
+  <div class="w-full h-2 bg-gray-800">
+    <div id="progress-bar" class="h-full bg-orange-500 transition-all duration-500 ease-out" style="width: 0%;"></div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex flex-col items-center justify-center p-8 relative">
+    <div class="max-w-5xl w-full">
+
+      <!-- Section Badge -->
+      <div class="mb-6 text-center md:text-left">
+        <span id="slide-part"
+          class="inline-block px-4 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-mono uppercase tracking-wider border border-gray-700">
+          <!-- Part text goes here -->
+        </span>
+      </div>
+
+      <!-- Slide Content Container -->
+      <div id="slide-container"
+        class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 md:p-12 shadow-2xl min-h-[500px] flex flex-col justify-center transform transition-all duration-300">
+
+        <!-- STANDARD LAYOUT -->
+        <div id="standard-layout" class="flex flex-col lg:flex-row gap-8 items-center w-full">
+          <div class="flex-1 w-full">
+            <div class="flex items-center justify-center md:justify-start gap-4 mb-8">
+              <div id="slide-icon-container"></div>
+              <h1 id="slide-title" class="text-3xl md:text-5xl font-bold text-white tracking-tight"></h1>
+            </div>
+            <ul id="slide-items" class="space-y-6 text-lg md:text-2xl text-gray-300"></ul>
+          </div>
+
+          <div id="slide-image-col" class="flex-1 w-full flex justify-center items-center mt-8 lg:mt-0 animate-fade-in"
+            style="display: none;">
+            <div
+              class="relative p-2 bg-gray-800 border border-gray-700 rounded-xl shadow-inner w-full flex justify-center">
+              <img id="slide-image" src="" alt=""
+                class="w-full h-auto max-h-[300px] object-contain rounded-lg bg-white p-2"
+                onerror="this.src='https://placehold.co/600x400/1f2937/f97316?text=Immagine+Non+Trovata'">
+            </div>
+          </div>
+        </div>
+
+        <!-- TERMINAL LAYOUT -->
+        <div id="terminal-layout" class="w-full flex flex-col lg:flex-row gap-8 items-stretch animate-fade-in"
+          style="display: none;">
+
+          <div class="flex-1 w-full lg:w-1/3 flex flex-col justify-center">
+            <div class="flex items-center gap-4 mb-6">
+              <i data-lucide="hard-drive" class="w-10 h-10 text-orange-500"></i>
+              <h1 class="text-3xl font-bold text-white">Simulazione</h1>
+            </div>
+            <p class="text-gray-400 mb-6 text-lg">Controlla lo spazio e archivia i documenti:</p>
+            <ol class="space-y-3 text-gray-300 text-lg list-decimal list-inside ml-2">
+              <li>Controlla lo spazio disco: <code class="text-orange-400 bg-gray-900 px-1 rounded">df -h</code></li>
+              <li>Crea l'archivio compresso della cartella 'documenti': <code
+                  class="text-orange-400 bg-gray-900 px-1 rounded">tar -czf docs.tar.gz documenti</code></li>
+              <li>Verifica che l'archivio sia stato creato: <code
+                  class="text-orange-400 bg-gray-900 px-1 rounded">ls -l</code></li>
+              <li>Monta la pendrive (/dev/sdb1) in /mnt/usb: <code
+                  class="text-orange-400 bg-gray-900 px-1 rounded">sudo mount /dev/sdb1 /mnt/usb</code></li>
+            </ol>
+          </div>
+
+          <div
+            class="flex-1 w-full lg:w-2/3 bg-gray-950 border border-gray-700 rounded-xl overflow-hidden shadow-inner flex flex-col font-mono text-sm md:text-base cursor-text"
+            onclick="document.getElementById('terminal-input').focus();">
+            <div class="bg-gray-800 px-4 py-2 flex items-center border-b border-gray-700">
+              <div class="flex gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+              </div>
+              <div class="mx-auto text-gray-400 text-xs">studente@its-lab: ~</div>
+            </div>
+
+            <div class="p-4 flex-grow flex flex-col h-[350px]">
+              <div id="terminal-history" class="flex-grow overflow-y-auto mb-2 text-gray-300 pr-2 space-y-1">
+                <div class="text-orange-400 mb-4">
+                  Storage Manager ITS LinuxLab.<br>
+                  Digita i comandi qui sotto e premi Invio.
+                </div>
+              </div>
+
+              <div class="flex items-center text-gray-300">
+                <span id="terminal-prompt" class="mr-2 text-orange-400 whitespace-nowrap">studente@its-lab:~$</span>
+                <input type="text" id="terminal-input"
+                  class="flex-grow bg-transparent border-none text-white font-mono w-full" autocomplete="off"
+                  spellcheck="false" autofocus>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Navigation -->
+  <footer class="p-6 bg-gray-900 border-t border-gray-800 flex items-center justify-between z-10">
+    <button id="btn-prev" onclick="prevSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+      disabled>
+      <i data-lucide="chevron-left" class="w-5 h-5"></i>
+      Precedente
+    </button>
+
+    <div id="footer-text" class="text-gray-500 font-mono text-sm hidden md:block"></div>
+
+    <button id="btn-next" onclick="nextSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-orange-600 text-white hover:bg-orange-500 hover:shadow-[0_0_15px_rgba(249,115,22,0.4)] hover:scale-105 active:scale-95">
+      Successiva
+      <i data-lucide="chevron-right" class="w-5 h-5"></i>
+    </button>
+  </footer>
+
+  <script>
+    const slidesData = [
+      {
+        part: "MODULO 7: ARCHIVIAZIONE E DISCHI",
+        title: "Gestire i Dati a Basso Livello",
+        icon: "database", iconColor: "text-orange-500",
+        items: [
+          "Benvenuti nel Modulo 7.",
+          "Lavoreremo direttamente con l'hardware di archiviazione.",
+          "Impareremo a leggere lo spazio, raggruppare i file per i backup e collegare dischi fisici al sistema senza l'uso dell'interfaccia grafica."
+        ]
+      },
+      {
+        part: "I DISCHI SU LINUX",
+        title: "Tutto è un File",
+        icon: "server", iconColor: "text-orange-400",
+        items: [
+          "In Linux non esistono concetti come 'Disco C:' o 'Disco D:'.",
+          "I dispositivi fisici vengono mappati come file speciali dentro la cartella /dev (Devices).",
+          "• /dev/sda : Il primo disco SATA o SCSI installato.",
+          "• /dev/sdb : Il secondo disco o una pendrive USB inserita.",
+          "• /dev/nvme0n1 : Un moderno disco SSD NVMe ad alta velocità."
+        ]
+      },
+      {
+        part: "SPAZIO E INCOMBRO",
+        title: "Analizzare lo Spazio: df e du",
+        icon: "pie-chart", iconColor: "text-yellow-400",
+        items: [
+          "Prima di fare un backup o installare app pesanti, controlliamo le risorse:",
+          "• df -h (Disk Free): Mostra l'occupazione di interi dischi e partizioni montate nel sistema. La -h (Human readable) trasforma i KB in GigaByte.",
+          "• du -sh cartella/ (Disk Usage): 'df' vede tutto il disco, 'du' calcola al volo il peso di una specifica cartella."
+        ]
+      },
+      {
+        part: "IL CONCETTO DI MOUNT",
+        title: "L'Albero Universale",
+        icon: "network", iconColor: "text-orange-500",
+        items: [
+          "Se non c'è il disco C:, come accedo a una chiavetta USB appena inserita?",
+          "Bisogna 'Montarla'.",
+          "Montare significa prendere il dispositivo fisico (/dev/sdb1) e agganciarlo a una cartella vuota preesistente nel file system (il Punto di Mount).",
+          "Da quel momento, entrando in quella cartella, vedrai i file della chiavetta!"
+        ]
+      },
+      {
+        part: "IL CONCETTO DI MOUNT",
+        title: "I Comandi mount e umount",
+        icon: "usb", iconColor: "text-orange-400",
+        items: [
+          "Questi comandi richiedono sempre i privilegi di root (sudo).",
+          "• sudo mount /dev/sdb1 /mnt/usb : Collega la partizione sdb1 alla cartella /mnt/usb.",
+          "• sudo umount /mnt/usb : Smonta il disco in modo sicuro (l'equivalente di 'Rimozione Sicura' in Windows).",
+          "Mai estrarre un disco senza prima usare umount!"
+        ]
+      },
+      {
+        part: "MONTAGGIO PERMANENTE",
+        title: "Il file /etc/fstab",
+        icon: "file-cog", iconColor: "text-orange-400",
+        items: [
+          "I comandi mount sono temporanei. Al riavvio del server, il disco non sarà più montato.",
+          "Per rendere la modifica permanente, si modifica il file /etc/fstab (File System Table).",
+          "In questo file si dichiarano gli UUID dei dischi e dove devono essere montati in automatico durante l'avvio del sistema.",
+          "Attenzione: Un errore in fstab può impedire l'avvio di Linux!"
+        ]
+      },
+      {
+        part: "ARCHIVIAZIONE",
+        title: "Il pacchetto di TAR",
+        icon: "package", iconColor: "text-cyan-400",
+        items: [
+          "Prima di spostare 1000 file piccoli, è più efficiente raggrupparli in un unico blocco.",
+          "Si usa 'tar' (Tape Archive, un comando storicamente usato per i nastri magnetici).",
+          "• tar -cvf archivio.tar cartella/ : 'Crea', 'Verboso' (mostra output), un 'File' da quella cartella.",
+          "Nota bene: tar NON comprime i file, li raggruppa e basta."
+        ]
+      },
+      {
+        part: "COMPRESSIONE",
+        title: "Stringere i dati: gzip",
+        icon: "shrink", iconColor: "text-cyan-400",
+        items: [
+          "Per ridurre il peso si usa storicamente gzip (crea file .gz).",
+          "Nella pratica quotidiana, i Sysadmin combinano raggruppamento e compressione aggiungendo una 'z' al comando tar:",
+          "• tar -czf backup.tar.gz cartella/ : Crea un file raggruppato e lo comprime al volo.",
+          "• tar -xzf backup.tar.gz : Estrae e decomprime i file."
+        ]
+      },
+      {
+        part: "PRATICA IN LABORATORIO",
+        title: "Esercitazione: L'Addetto ai Dati",
+        icon: "save", iconColor: "text-green-400",
+        items: [
+          "Task 1: Controlla lo stato dei dischi per capire quanto spazio libero ti è rimasto ('df').",
+          "Task 2: Comprimi la cartella 'documenti' usando 'tar' e 'gzip' in un sol colpo.",
+          "Task 3: Controlla con 'ls' che il file compresso sia stato generato.",
+          "Task 4: Usa i poteri di sudo per montare una pendrive virtuale appena inserita (/dev/sdb1) nella cartella /mnt/usb."
+        ]
+      },
+      {
+        part: "PRATICA IN LABORATORIO",
+        isTerminal: true
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function renderSlide() {
+      const slide = slidesData[currentIndex];
+      const container = document.getElementById('slide-container');
+      const standardLayout = document.getElementById('standard-layout');
+      const terminalLayout = document.getElementById('terminal-layout');
+
+      container.classList.remove('animate-fade-in');
+      void container.offsetWidth;
+      container.classList.add('animate-fade-in');
+
+      document.getElementById('slide-part').textContent = slide.part;
+      document.getElementById('footer-text').textContent = `root@its-lab:~# slide ${currentIndex + 1} di ${slidesData.length}`;
+
+      if (slide.isTerminal) {
+        standardLayout.style.display = 'none';
+        terminalLayout.style.display = 'flex';
+        setTimeout(() => document.getElementById('terminal-input').focus(), 100);
+      } else {
+        standardLayout.style.display = 'flex';
+        terminalLayout.style.display = 'none';
+
+        document.getElementById('slide-title').textContent = slide.title;
+        document.getElementById('slide-icon-container').innerHTML = `<i data-lucide="${slide.icon}" class="w-12 h-12 ${slide.iconColor} mb-4"></i>`;
+
+        const itemsHtml = slide.items.map(item => {
+          const isIndented = /^[123]\.|^Task|^•/.test(item);
+          return `
+                        <li class="flex items-start">
+                            <span class="text-orange-500 mr-4 mt-1">~</span>
+                            <span class="${isIndented ? 'ml-6' : ''}">${item}</span>
+                        </li>
+                    `;
+        }).join('');
+        document.getElementById('slide-items').innerHTML = itemsHtml;
+
+        const imgCol = document.getElementById('slide-image-col');
+        if (slide.image) {
+          imgCol.style.display = 'flex';
+          document.getElementById('slide-image').src = slide.image;
+          document.getElementById('slide-image').alt = slide.imageAlt || 'Immagine slide';
+        } else {
+          imgCol.style.display = 'none';
+        }
+      }
+
+      const progress = ((currentIndex + 1) / slidesData.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+
+      btnPrev.disabled = currentIndex === 0;
+      btnPrev.className = currentIndex === 0
+        ? "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+        : "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white hover:scale-105 active:scale-95";
+
+      btnNext.disabled = currentIndex === slidesData.length - 1;
+      btnNext.className = currentIndex === slidesData.length - 1
+        ? "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+        : "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-orange-600 text-white hover:bg-orange-500 hover:shadow-[0_0_15px_rgba(249,115,22,0.4)] hover:scale-105 active:scale-95";
+
+      lucide.createIcons();
+    }
+
+    function nextSlide() {
+      if (currentIndex < slidesData.length - 1) {
+        currentIndex++;
+        renderSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderSlide();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName.toLowerCase() === 'input') return;
+      if (e.key === 'ArrowRight') nextSlide();
+      else if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    // ==========================================
+    // LOGICA DEL FINTO TERMINALE MODULO 7
+    // ==========================================
+    const termInput = document.getElementById("terminal-input");
+    const termHistory = document.getElementById("terminal-history");
+
+    let currentStep = 0;
+    let todayDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+
+    const steps = [
+      { expected: ["df -h"], output: `Filesystem      Size  Used Avail Use% Mounted on<br>tmpfs           1.6G  1.5M  1.6G   1% /run<br>/dev/sda1        40G   25G   13G  66% /` },
+      { expected: ["tar -czf docs.tar.gz documenti", "tar -zcvf docs.tar.gz documenti", "tar czf docs.tar.gz documenti"], output: "" },
+      { expected: ["ls -l", "ls -lh", "ls"], output: `drwxr-xr-x 2 studente studente 4.0K ${todayDate} 09:00 documenti<br>-rw-r--r-- 1 studente studente 1.2M ${todayDate} 10:15 docs.tar.gz` },
+      { expected: ["sudo mount /dev/sdb1 /mnt/usb", "sudo mount /dev/sdb1 /mnt/usb/"], output: `[sudo] password for studente: <br><span class='text-gray-400'>(Simulazione: password accettata)</span><br><br><span class='text-green-400 font-bold'>Missione Completata! Backup effettuato e disco montato.</span>` }
+    ];
+
+    termInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        let cmd = termInput.value.trim().replace(/\s+/g, ' ');
+        if (!cmd) return;
+
+        termHistory.innerHTML += `<div><span class="text-orange-400">studente@its-lab:~$</span> <span class="text-white">${cmd}</span></div>`;
+
+        if (currentStep < steps.length) {
+          let match = steps[currentStep].expected.includes(cmd);
+
+          if (match) {
+            if (steps[currentStep].output) {
+              termHistory.innerHTML += `<div class="text-gray-300 font-mono whitespace-pre-wrap">${steps[currentStep].output}</div>`;
+            }
+            currentStep++;
+          } else {
+            if (cmd.startsWith("tar") && !cmd.includes("z") && currentStep === 1) {
+              termHistory.innerHTML += `<div class="text-red-500 font-bold">Attenzione! Devi includere il flag 'z' per comprimerlo usando gzip, altrimenti lo stai solo impacchettando.</div>`;
+            } else if (cmd.includes("mount") && !cmd.includes("sudo") && currentStep === 3) {
+              termHistory.innerHTML += `<div class="text-red-400">Montare un disco richiede privilegi di amministratore. Aggiungi sudo!</div>`;
+            } else {
+              termHistory.innerHTML += `<div class="text-red-400">Comando errato o fuori sequenza. Controlla le istruzioni.</div>`;
+            }
+          }
+        } else {
+          termHistory.innerHTML += `<div class="text-gray-400">Lavoro terminato. Torna in cattedra.</div>`;
+        }
+
+        termInput.value = "";
+        termHistory.scrollTop = termHistory.scrollHeight;
+      }
+    });
+
+    renderSlide();
+  </script>
+</body>
+
+</html>

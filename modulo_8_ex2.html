@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speedrun Scripting - ITS LinuxLab</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    .delay-100 {
+      animation-delay: 100ms;
+    }
+
+    .delay-200 {
+      animation-delay: 200ms;
+    }
+
+    .delay-300 {
+      animation-delay: 300ms;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #111827;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #059669;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #10b981;
+    }
+
+    .answer-box {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, opacity 0.3s ease-out, margin 0.3s ease-out;
+      opacity: 0;
+      margin-top: 0;
+    }
+
+    .answer-box.open {
+      max-height: 100px;
+      opacity: 1;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 text-gray-100 font-sans selection:bg-emerald-500 selection:text-white">
+
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <i data-lucide="terminal" class="w-8 h-8 text-emerald-500"></i>
+          <span class="font-bold text-xl tracking-tight">ITS <span class="text-emerald-500">LinuxLab</span></span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="./" class="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Torna alla Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header con Cronometro -->
+  <header class="bg-gray-950 border-b border-gray-800 py-10 relative overflow-hidden">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 animate-fade-in">
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/30 border border-emerald-500/30 text-xs text-emerald-400 font-mono mb-4 uppercase tracking-wider">
+        <i data-lucide="timer" class="w-4 h-4 text-emerald-500"></i> Speedrun Mode
+      </div>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4">15 Minuti di Automazione</h1>
+      <p class="text-gray-400 text-lg mb-8">Risolvi questi 8 task nel minor tempo possibile. Non dimenticare la sintassi
+        rigorosa di Bash!</p>
+
+      <!-- Timer Display -->
+      <div
+        class="inline-flex flex-col items-center justify-center p-6 bg-gray-900 border-2 border-gray-700 rounded-2xl shadow-2xl mb-4 transition-colors duration-300"
+        id="timer-box">
+        <span id="time-display" class="text-5xl font-mono font-bold text-white tracking-widest">15:00</span>
+        <button id="start-btn" onclick="startTimer()"
+          class="mt-4 px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold flex items-center gap-2 transition-all active:scale-95">
+          <i data-lucide="play" class="w-4 h-4"></i> Inizia Sfida
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="space-y-4">
+
+      <!-- Task 1 -->
+      <div class="bg-gray-800/60 border border-gray-700 p-5 rounded-xl animate-fade-in delay-100">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-emerald-400 font-mono font-bold mr-2">01.</span>
+            <span class="text-gray-200">Salva la stringa "ITS" all'interno di una variabile chiamata <code
+                class="bg-gray-900 text-gray-300 px-1 rounded">SCUOLA</code> (senza usare spazi!).</span>
+          </div>
+          <button onclick="toggleAnswer('ans-1')"
+            class="shrink-0 text-sm bg-gray-900 hover:bg-gray-700 text-gray-400 hover:text-white px-3 py-1.5 rounded-md border border-gray-700 transition-colors">
+            Mostra Comando
+          </button>
+        </div>
+        <div id="ans-1" class="answer-box">
+          <div class="p-3 bg-gray-950 border-l-4 border-emerald-500 rounded font-mono text-sm text-green-400">
+            SCUOLA="ITS"
+          </div>
+        </div>
+      </div>
+
+      <!-- Task 2 -->
+      <div class="bg-gray-800/60 border border-gray-700 p-5 rounded-xl animate-fade-in delay-100">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-emerald-400 font-mono font-bold mr-2">02.</span>
+            <span class="text-gray-200">Stampa a video il contenuto della variabile <code
+                class="bg-gray-900 text-gray-300 px-1 rounded">SCUOLA</code> appena creata.</span>
+          </div>
+          <button onclick="toggleAnswer('ans-2')"
+            class="shrink-0 text-sm bg-gray-900 hover:bg-gray-700 text-gray-400 hover:text-white px-3 py-1.5 rounded-md border border-gray-700 transition-colors">
+            Mostra Comando
+          </button>
+        </div>
+        <div id="ans-2" class="answer-box">
+          <div class="p-3 bg-gray-950 border-l-4 border-emerald-500 rounded font-mono text-sm text-green-400">
+            echo $SCUOLA
+          </div>
+        </div>
+      </div>
+
+      <!-- Task 3 -->
+      <div class="bg-gray-800/60 border border-gray-700 p-5 rounded-xl animate-fade-in delay-200">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-emerald-400 font-mono font-bold mr-2">03.</span>
+            <span class="text-gray-200">Crea uno script vuoto <code
+                class="bg-gray-900 text-gray-300 px-1 rounded">script.sh</code> e rendilo eseguibile combinando i
+              comandi con <code class="bg-gray-900 text-gray-300 px-1 rounded">&&</code>.</span>
+          </div>
+          <button onclick="toggleAnswer('ans-3')"
+            class="shrink-0 text-sm bg-gray-900 hover:bg-gray-700 text-gray-400 hover:text-white px-3 py-1.5 rounded-md border border-gray-700 transition-colors">
+            Mostra Comando
+          </button>
+        </div>
+        <div id="ans-3" class="answer-box">
+          <div class="p-3 bg-gray-950 border-l-4 border-emerald-500 rounded font-mono text-sm text-green-400">
+            touch script.sh && chmod +x script.sh
+          </div>
+        </div>
+      </div>
+
+      <!-- Task 4 -->
+      <div class="bg-gray-800/60 border border-gray-700 p-5 rounded-xl animate-fade-in delay-200">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-emerald-400 font-mono font-bold mr-2">04.</span>
+            <span class="text-gray-200">Scrivi (usando <code class="text-yellow-400">></code>) la riga di shebang
+              corretta per bash all'interno di <code
+                class="bg-gray-900 text-gray-300 px-1 rounded">script.sh</code>.</span>
+          </div>
+          <button onclick="toggleAnswer('ans-4')"
+            class="shrink-0 text-sm bg-gray-900 hover:bg-gray-700 text-gray-400 hover:text-white px-3 py-1.5 rounded-md border border-gray-700 transition-colors">
+            Mostra Comando
+          </button>
+        </div>
+        <div id="ans-4" class="answer-box">
+          <div class="p-3 bg-gray-950 border-l-4 border-emerald-500 rounded font-mono text-sm text-green-400">
+            echo "#!/bin/bash" > script.sh
+          </div>
+        </div>
+      </div>
+
+      <!-- Task 5 -->
+      <div class="bg-gray-800/60 border border-gray-700 p-5 rounded-xl animate-fade-in delay-200">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-emerald-400 font-mono font-bold mr-2">05.</span>
+            <span class="text-gray-200">Aggiungi <strong>in coda</strong> allo script il comando per stampare la parola
+              "Fatto".</span>
+          </div>
+          <button onclick="toggleAnswer('ans-5')"
+            class="shrink-0 text-sm bg-gray-900 hover:bg-gray-700 text-gray-400 hover:text-white px-3 py-1.5 rounded-md border border-gray-700 transition-colors">
+            Mostra Comando
+          </button>
+        </div>
+        <div id="ans-5" class="answer-box">
+          <div class="p-3 bg-gray-950 border-l-4 border-emerald-500 rounded font-mono text-sm text-green-400">
+            echo "echo Fatto" >> script.sh
+          </div>
+        </div>
+      </div>
+
+      <!-- Task 6 -->
+      <div class="bg-gray-800/60 border border-gray-700 p-5 rounded-xl animate-fade-in delay-300">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-emerald-400 font-mono font-bold mr-2">06.</span>
+            <span class="text-gray-200">Esegui lo script che hai appena preparato trovandosi nella tua directory
+              corrente.</span>
+          </div>
+          <button onclick="toggleAnswer('ans-6')"
+            class="shrink-0 text-sm bg-gray-900 hover:bg-gray-700 text-gray-400 hover:text-white px-3 py-1.5 rounded-md border border-gray-700 transition-colors">
+            Mostra Comando
+          </button>
+        </div>
+        <div id="ans-6" class="answer-box">
+          <div class="p-3 bg-gray-950 border-l-4 border-emerald-500 rounded font-mono text-sm text-green-400">
+            ./script.sh
+          </div>
+        </div>
+      </div>
+
+      <!-- Task 7 -->
+      <div class="bg-gray-800/60 border border-gray-700 p-5 rounded-xl animate-fade-in delay-300">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-emerald-400 font-mono font-bold mr-2">07.</span>
+            <span class="text-gray-200">Scrivi (solo teoricamente a video con echo) la stringa esatta di Cron per
+              eseguire <code class="bg-gray-900 text-gray-300 px-1 rounded">/backup.sh</code> tutti i giorni alle
+              <strong>03:00 di notte</strong>.</span>
+          </div>
+          <button onclick="toggleAnswer('ans-7')"
+            class="shrink-0 text-sm bg-gray-900 hover:bg-gray-700 text-gray-400 hover:text-white px-3 py-1.5 rounded-md border border-gray-700 transition-colors">
+            Mostra Comando
+          </button>
+        </div>
+        <div id="ans-7" class="answer-box">
+          <div class="p-3 bg-gray-950 border-l-4 border-emerald-500 rounded font-mono text-sm text-green-400">
+            echo "0 3 * * * /backup.sh"
+          </div>
+        </div>
+      </div>
+
+      <!-- Task 8 -->
+      <div class="bg-gray-800/60 border border-gray-700 p-5 rounded-xl animate-fade-in delay-300">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-emerald-400 font-mono font-bold mr-2">08.</span>
+            <span class="text-gray-200">Scrivi la stringa di Cron per eseguire <code
+                class="bg-gray-900 text-gray-300 px-1 rounded">/test.sh</code> <strong>ogni singolo minuto</strong>
+              ininterrottamente.</span>
+          </div>
+          <button onclick="toggleAnswer('ans-8')"
+            class="shrink-0 text-sm bg-gray-900 hover:bg-gray-700 text-gray-400 hover:text-white px-3 py-1.5 rounded-md border border-gray-700 transition-colors">
+            Mostra Comando
+          </button>
+        </div>
+        <div id="ans-8" class="answer-box">
+          <div class="p-3 bg-gray-950 border-l-4 border-emerald-500 rounded font-mono text-sm text-green-400">
+            echo "* * * * * /test.sh"
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-800 py-8 bg-gray-900 mt-auto">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm font-mono">
+      root@its-lab:~# logout
+    </div>
+  </footer>
+
+  <!-- Logic -->
+  <script>
+    lucide.createIcons();
+
+    // Reveal logic
+    function toggleAnswer(id) {
+      const container = document.getElementById(id);
+      if (container.classList.contains('open')) {
+        container.classList.remove('open');
+      } else {
+        container.classList.add('open');
+      }
+    }
+
+    // Timer logic
+    let timerInterval;
+    let timeLeft = 15 * 60; // 15 minutes in seconds
+    let isRunning = false;
+
+    function updateDisplay() {
+      const display = document.getElementById('time-display');
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+      const box = document.getElementById('timer-box');
+      if (timeLeft <= 60 && timeLeft > 0) {
+        // Last minute alert
+        box.classList.remove('border-gray-700');
+        box.classList.add('border-red-500', 'bg-red-900/20');
+        display.classList.add('text-red-400');
+      } else if (timeLeft === 0) {
+        display.textContent = "TEMPO SCADUTO";
+        display.classList.remove('text-red-400');
+        display.classList.add('text-red-500', 'text-4xl');
+      }
+    }
+
+    function startTimer() {
+      if (isRunning) return;
+
+      const btn = document.getElementById('start-btn');
+      btn.innerHTML = `<i data-lucide="square" class="w-4 h-4"></i> In Esecuzione...`;
+      btn.classList.replace('bg-emerald-600', 'bg-gray-600');
+      btn.classList.replace('hover:bg-emerald-500', 'hover:bg-gray-500');
+      btn.disabled = true;
+      lucide.createIcons();
+
+      isRunning = true;
+      timerInterval = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          updateDisplay();
+        } else {
+          clearInterval(timerInterval);
+          isRunning = false;
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+
+</html>

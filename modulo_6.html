@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corso Linux ITS - Modulo 6</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #terminal-history::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #terminal-history::-webkit-scrollbar-track {
+      background: #111827;
+    }
+
+    #terminal-history::-webkit-scrollbar-thumb {
+      background: #0891b2;
+      /* cyan-600 */
+      border-radius: 4px;
+    }
+
+    #terminal-history::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+      /* cyan-500 */
+    }
+
+    #terminal-input:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 text-gray-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-white">
+
+  <div class="w-full h-2 bg-gray-800">
+    <div id="progress-bar" class="h-full bg-cyan-500 transition-all duration-500 ease-out" style="width: 0%;"></div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex flex-col items-center justify-center p-8 relative">
+    <div class="max-w-5xl w-full">
+
+      <div class="mb-6 text-center md:text-left">
+        <span id="slide-part"
+          class="inline-block px-4 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-mono uppercase tracking-wider border border-gray-700"></span>
+      </div>
+
+      <div id="slide-container"
+        class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 md:p-12 shadow-2xl min-h-[500px] flex flex-col justify-center transform transition-all duration-300">
+
+        <!-- STANDARD LAYOUT -->
+        <div id="standard-layout" class="flex flex-col lg:flex-row gap-8 items-center w-full">
+          <div class="flex-1 w-full">
+            <div class="flex items-center justify-center md:justify-start gap-4 mb-8">
+              <div id="slide-icon-container"></div>
+              <h1 id="slide-title" class="text-3xl md:text-5xl font-bold text-white tracking-tight"></h1>
+            </div>
+            <ul id="slide-items" class="space-y-6 text-lg md:text-2xl text-gray-300"></ul>
+          </div>
+
+          <div id="slide-image-col" class="flex-1 w-full flex justify-center items-center mt-8 lg:mt-0 animate-fade-in"
+            style="display: none;">
+            <div
+              class="relative p-2 bg-gray-800 border border-gray-700 rounded-xl shadow-inner w-full flex justify-center">
+              <img id="slide-image" src="" alt=""
+                class="w-full h-auto max-h-[300px] object-contain rounded-lg bg-white p-2"
+                onerror="this.src='https://placehold.co/600x400/1f2937/06b6d4?text=Immagine+Non+Trovata'">
+            </div>
+          </div>
+        </div>
+
+        <!-- TERMINAL LAYOUT -->
+        <div id="terminal-layout" class="w-full flex flex-col lg:flex-row gap-8 items-stretch animate-fade-in"
+          style="display: none;">
+
+          <div class="flex-1 w-full lg:w-1/3 flex flex-col justify-center">
+            <div class="flex items-center gap-4 mb-6">
+              <i data-lucide="globe" class="w-10 h-10 text-cyan-500"></i>
+              <h1 class="text-3xl font-bold text-white">Simulazione</h1>
+            </div>
+            <p class="text-gray-400 mb-6 text-lg">Il tuo primo Web Server. Svolgi questi task:</p>
+            <ol class="space-y-3 text-gray-300 text-lg list-decimal list-inside ml-2">
+              <li>Aggiorna la lista dei pacchetti: <code
+                  class="text-cyan-400 bg-gray-900 px-1 rounded">sudo apt update</code></li>
+              <li>Installa il server Nginx: <code
+                  class="text-cyan-400 bg-gray-900 px-1 rounded">sudo apt install nginx</code></li>
+              <li>Verifica che il server risponda internamente: <code
+                  class="text-cyan-400 bg-gray-900 px-1 rounded">curl localhost</code></li>
+              <li>Scarica un file esterno per testare la rete: <code
+                  class="text-cyan-400 bg-gray-900 px-1 rounded">wget https://gnu.org</code></li>
+            </ol>
+          </div>
+
+          <div
+            class="flex-1 w-full lg:w-2/3 bg-gray-950 border border-gray-700 rounded-xl overflow-hidden shadow-inner flex flex-col font-mono text-sm md:text-base cursor-text"
+            onclick="document.getElementById('terminal-input').focus();">
+            <div class="bg-gray-800 px-4 py-2 flex items-center border-b border-gray-700">
+              <div class="flex gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+              </div>
+              <div class="mx-auto text-gray-400 text-xs">studente@its-lab: ~</div>
+            </div>
+
+            <div class="p-4 flex-grow flex flex-col h-[350px]">
+              <div id="terminal-history" class="flex-grow overflow-y-auto mb-2 text-gray-300 pr-2 space-y-1">
+                <div class="text-cyan-400 mb-4">
+                  Simulatore Network & APT ITS LinuxLab.<br>
+                  Digita i comandi qui sotto e premi Invio.
+                </div>
+              </div>
+
+              <div class="flex items-center text-gray-300">
+                <span id="terminal-prompt" class="mr-2 text-cyan-400 whitespace-nowrap">studente@its-lab:~$</span>
+                <input type="text" id="terminal-input"
+                  class="flex-grow bg-transparent border-none text-white font-mono w-full" autocomplete="off"
+                  spellcheck="false" autofocus>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Navigation -->
+  <footer class="p-6 bg-gray-900 border-t border-gray-800 flex items-center justify-between z-10">
+    <button id="btn-prev" onclick="prevSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+      disabled>
+      <i data-lucide="chevron-left" class="w-5 h-5"></i>
+      Precedente
+    </button>
+
+    <div id="footer-text" class="text-gray-500 font-mono text-sm hidden md:block"></div>
+
+    <button id="btn-next" onclick="nextSlide()"
+      class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-cyan-600 text-white hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] hover:scale-105 active:scale-95">
+      Successiva
+      <i data-lucide="chevron-right" class="w-5 h-5"></i>
+    </button>
+  </footer>
+
+  <script>
+    const slidesData = [
+      {
+        part: "MODULO 6: RETE E SOFTWARE",
+        title: "Connettersi al Mondo",
+        icon: "globe", iconColor: "text-cyan-500",
+        items: [
+          "Benvenuti nel Modulo 6: Networking e Software.",
+          "Un server Linux isolato non serve a molto.",
+          "Impareremo a configurare e diagnosticare la rete, e a installare nuovi applicativi prendendoli dai repository ufficiali."
+        ]
+      },
+      {
+        part: "DIAGNOSTICA DI RETE",
+        title: "Ip e Connettività",
+        icon: "network", iconColor: "text-blue-400",
+        items: [
+          "Per controllare l'indirizzo IP del server usiamo il comando 'ip a' (che sostituisce il vecchio 'ifconfig').",
+          "• 'lo' (Loopback): L'indirizzo interno della macchina (127.0.0.1 o localhost).",
+          "• 'eth0' o 'ens33': La scheda di rete fisica o virtuale.",
+          "Per testare se navighiamo su internet usiamo 'ping': es. 'ping 8.8.8.8' (i DNS di Google). Premi Ctrl+C per fermarlo."
+        ]
+      },
+      {
+        part: "IL BROWSER DEL TERMINALE",
+        title: "Scaricare file: wget",
+        icon: "download", iconColor: "text-cyan-400",
+        items: [
+          "Come scarichiamo un file se non abbiamo un'interfaccia grafica e un browser?",
+          "Usiamo 'wget' (Web Get).",
+          "Sintassi: wget [URL_DEL_FILE]",
+          "Il file verrà scaricato silenziosamente e salvato nella cartella in cui vi trovate in quel momento (pwd)."
+        ]
+      },
+      {
+        part: "IL BROWSER DEL TERMINALE",
+        title: "Interrogare i server: curl",
+        icon: "code", iconColor: "text-cyan-400",
+        items: [
+          "Mentre 'wget' salva i file su disco, 'curl' (Client URL) stampa il contenuto direttamente sul terminale (stdout).",
+          "È il comando preferito dagli sviluppatori per testare le API o vedere se un sito web sta rispondendo.",
+          "• 'curl localhost' : Mostra il codice HTML della pagina web ospitata sul nostro stesso server.",
+          "• 'curl -I google.com' : Mostra solo l'intestazione HTTP (Headers) senza scaricare la pagina."
+        ]
+      },
+      {
+        part: "GESTIONE SOFTWARE",
+        title: "Cosa sono i Repository?",
+        icon: "package", iconColor: "text-purple-400",
+        items: [
+          "In Linux non si va su internet a cercare i file '.exe' da installare.",
+          "Si usano i 'Repository': enormi archivi online sicuri e certificati gestiti dai creatori della distribuzione (es. Ubuntu).",
+          "È l'equivalente del Google Play Store o dell'App Store, ma gestito interamente da riga di comando."
+        ]
+      },
+      {
+        part: "GESTIONE SOFTWARE (APT)",
+        title: "Aggiornare il sistema",
+        icon: "refresh-cw", iconColor: "text-yellow-400",
+        items: [
+          "Il tool che usiamo sulle derivate Debian/Ubuntu si chiama APT (Advanced Package Tool).",
+          "Regola d'oro: richiedono sempre 'sudo'!",
+          "• sudo apt update : NON aggiorna i programmi. Scarica solo il catalogo aggiornato dai repository (la lista delle novità).",
+          "• sudo apt upgrade : Installa effettivamente gli aggiornamenti per i pacchetti già presenti nel sistema."
+        ]
+      },
+      {
+        part: "GESTIONE SOFTWARE (APT)",
+        title: "Installare e Rimuovere",
+        icon: "box", iconColor: "text-green-400",
+        items: [
+          "Aggiungere e togliere programmi è semplicissimo.",
+          "• sudo apt install nginx : Scarica e installa il web server Nginx e tutte le sue dipendenze.",
+          "• sudo apt remove nginx : Disinstalla il programma.",
+          "• sudo apt autoremove : Pulizia profonda! Rimuove tutte le librerie rimaste orfane che nessun programma utilizza più."
+        ]
+      },
+      {
+        part: "PRATICA IN LABORATORIO",
+        title: "Esercitazione: Web Server",
+        icon: "server", iconColor: "text-cyan-500",
+        items: [
+          "Task 1: Aggiorna l'elenco dei pacchetti (update).",
+          "Task 2: Installa il pacchetto 'nginx' (il web server più usato al mondo).",
+          "Task 3: Usa 'curl' su localhost per assicurarti che il server sia attivo e risponda.",
+          "Task 4: Usa 'wget' per simulare il download di una risorsa esterna.",
+          "Iniziamo l'installazione!"
+        ]
+      },
+      {
+        part: "PRATICA IN LABORATORIO",
+        isTerminal: true
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function renderSlide() {
+      const slide = slidesData[currentIndex];
+      const container = document.getElementById('slide-container');
+      const standardLayout = document.getElementById('standard-layout');
+      const terminalLayout = document.getElementById('terminal-layout');
+
+      container.classList.remove('animate-fade-in');
+      void container.offsetWidth;
+      container.classList.add('animate-fade-in');
+
+      document.getElementById('slide-part').textContent = slide.part;
+      document.getElementById('footer-text').textContent = `root@its-lab:~# slide ${currentIndex + 1} di ${slidesData.length}`;
+
+      if (slide.isTerminal) {
+        standardLayout.style.display = 'none';
+        terminalLayout.style.display = 'flex';
+        setTimeout(() => document.getElementById('terminal-input').focus(), 100);
+      } else {
+        standardLayout.style.display = 'flex';
+        terminalLayout.style.display = 'none';
+
+        document.getElementById('slide-title').textContent = slide.title;
+        document.getElementById('slide-icon-container').innerHTML = `<i data-lucide="${slide.icon}" class="w-12 h-12 ${slide.iconColor} mb-4"></i>`;
+
+        const itemsHtml = slide.items.map(item => {
+          const isIndented = /^[123]\.|^Task|^•/.test(item);
+          return `
+                        <li class="flex items-start">
+                            <span class="text-cyan-500 mr-4 mt-1">~</span>
+                            <span class="${isIndented ? 'ml-6' : ''}">${item}</span>
+                        </li>
+                    `;
+        }).join('');
+        document.getElementById('slide-items').innerHTML = itemsHtml;
+
+        const imgCol = document.getElementById('slide-image-col');
+        if (slide.image) {
+          imgCol.style.display = 'flex';
+          document.getElementById('slide-image').src = slide.image;
+          document.getElementById('slide-image').alt = slide.imageAlt || 'Immagine slide';
+        } else {
+          imgCol.style.display = 'none';
+        }
+      }
+
+      const progress = ((currentIndex + 1) / slidesData.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+
+      btnPrev.disabled = currentIndex === 0;
+      btnPrev.className = currentIndex === 0
+        ? "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+        : "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-200 hover:bg-gray-700 hover:text-white hover:scale-105 active:scale-95";
+
+      btnNext.disabled = currentIndex === slidesData.length - 1;
+      btnNext.className = currentIndex === slidesData.length - 1
+        ? "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-gray-800 text-gray-600 cursor-not-allowed"
+        : "flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all bg-cyan-600 text-white hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] hover:scale-105 active:scale-95";
+
+      lucide.createIcons();
+    }
+
+    function nextSlide() {
+      if (currentIndex < slidesData.length - 1) {
+        currentIndex++;
+        renderSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderSlide();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName.toLowerCase() === 'input') return;
+      if (e.key === 'ArrowRight') nextSlide();
+      else if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    // ==========================================
+    // LOGICA DEL FINTO TERMINALE MODULO 6
+    // ==========================================
+    const termInput = document.getElementById("terminal-input");
+    const termHistory = document.getElementById("terminal-history");
+
+    let currentStep = 0;
+
+    const steps = [
+      { expected: ["sudo apt update", "sudo apt-get update"], output: `Hit:1 http://archive.ubuntu.com/ubuntu jammy InRelease<br>Get:2 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]<br>Fetched 110 kB in 1s (180 kB/s)<br>Reading package lists... Done<br>Building dependency tree... Done` },
+      { expected: ["sudo apt install nginx", "sudo apt-get install nginx"], output: `Reading package lists... Done<br>The following NEW packages will be installed:<br>  nginx nginx-common nginx-core<br>0 upgraded, 3 newly installed, 0 to remove.<br>Unpacking nginx (1.18.0) ...<br>Setting up nginx ...<br>Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /lib/systemd/system/nginx.service.` },
+      { expected: ["curl localhost", "curl 127.0.0.1"], output: `&lt;!DOCTYPE html&gt;<br>&lt;html&gt;<br>&lt;head&gt;<br>&lt;title&gt;Welcome to nginx!&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;<br>&lt;p&gt;If you see this page, the nginx web server is successfully installed and working.&lt;/p&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;` },
+      { expected: ["wget https://gnu.org", "wget http://gnu.org"], output: `--2026-05-07 10:15:00--  https://gnu.org/<br>Resolving gnu.org (gnu.org)... 209.51.188.148<br>Connecting to gnu.org (gnu.org)|209.51.188.148|:443... connected.<br>HTTP request sent, awaiting response... 200 OK<br>Length: 35000 (34K) [text/html]<br>Saving to: 'index.html'<br><br><span class='text-green-400 font-bold'>Missione Completata! Sei ufficialmente online.</span>` }
+    ];
+
+    termInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        let cmd = termInput.value.trim().replace(/\s+/g, ' ');
+        if (!cmd) return;
+
+        termHistory.innerHTML += `<div><span class="text-cyan-400">studente@its-lab:~$</span> <span class="text-white">${cmd}</span></div>`;
+
+        if (currentStep < steps.length) {
+          let match = steps[currentStep].expected.includes(cmd);
+
+          if (match) {
+            if (steps[currentStep].output) {
+              termHistory.innerHTML += `<div class="text-gray-300 font-mono whitespace-pre-wrap">${steps[currentStep].output}</div>`;
+            }
+            currentStep++;
+          } else {
+            if (cmd.startsWith("apt") && !cmd.includes("sudo") && (currentStep === 0 || currentStep === 1)) {
+              termHistory.innerHTML += `<div class="text-red-500 font-bold">Errore di Permessi! Non puoi installare o aggiornare software senza privilegi di amministratore (usa sudo).</div>`;
+            } else if (cmd.includes("upgrade") && currentStep === 0) {
+              termHistory.innerHTML += `<div class="text-red-400">Attenzione: 'upgrade' installa i pacchetti. A noi serve solo aggiornare la lista (il catalogo). Riprova.</div>`;
+            } else {
+              termHistory.innerHTML += `<div class="text-red-400">Comando non valido per questo step. Controlla le istruzioni a sinistra.</div>`;
+            }
+          }
+        } else {
+          termHistory.innerHTML += `<div class="text-gray-400">Installazione completata. Non c'è altro da fare qui.</div>`;
+        }
+
+        termInput.value = "";
+        termHistory.scrollTop = termHistory.scrollHeight;
+      }
+    });
+
+    renderSlide();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio Modulo 6 - ITS LinuxLab</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    .delay-100 {
+      animation-delay: 100ms;
+    }
+
+    .delay-200 {
+      animation-delay: 200ms;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #111827;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4B5563;
+    }
+
+    /* Stili per il Quiz */
+    .quiz-option {
+      @apply flex items-center p-4 border border-gray-700 rounded-lg cursor-pointer bg-gray-800/50 hover:bg-gray-800 transition-colors mb-3;
+    }
+
+    .quiz-option.selected {
+      @apply border-cyan-500 bg-cyan-900/20 ring-1 ring-cyan-500;
+    }
+
+    .quiz-option.correct {
+      @apply border-green-500 bg-green-900/20 ring-1 ring-green-500;
+    }
+
+    .quiz-option.wrong {
+      @apply border-red-500 bg-red-900/20 ring-1 ring-red-500 opacity-70;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 text-gray-100 font-sans selection:bg-cyan-500 selection:text-white">
+
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <i data-lucide="terminal" class="w-8 h-8 text-green-500"></i>
+          <span class="font-bold text-xl tracking-tight">ITS <span class="text-green-500">LinuxLab</span></span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="./" class="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Torna alla Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="bg-gray-950 border-b border-gray-800 py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-xs text-cyan-400 font-mono mb-4 uppercase tracking-wider">
+        <i data-lucide="globe" class="w-4 h-4"></i> Network & Software
+      </div>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Esercitazioni Modulo 6</h1>
+      <p class="text-gray-400 text-lg">Indirizzi IP, verifica connettività, download di file da riga di comando e
+        installazione di pacchetti software.</p>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- PARTE 1: GUIDA SCENARI -->
+    <section class="animate-fade-in delay-100">
+      <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
+        <i data-lucide="book-open" class="w-6 h-6 text-cyan-400"></i>
+        <h2 class="text-2xl font-bold text-white">1. Guida Rapida: Rete e Software</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700">
+          <h3 class="text-lg font-bold text-cyan-400 mb-2">Diagnostica di Rete</h3>
+          <p class="text-gray-400 text-sm mb-3">Controlla il tuo IP locale e verifica se raggiungi internet.</p>
+          <div class="font-mono text-sm bg-gray-900 p-3 rounded border border-gray-700 text-gray-300">
+            <span class="text-gray-500"># Trova il tuo indirizzo IP</span><br>
+            <span class="text-cyan-400">$</span> ip a<br>
+            <span class="text-gray-500"># Testa connessione (usa Ctrl+C per fermare)</span><br>
+            <span class="text-cyan-400">$</span> ping 8.8.8.8
+          </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700">
+          <h3 class="text-lg font-bold text-yellow-400 mb-2">Gestione Pacchetti (APT)</h3>
+          <p class="text-gray-400 text-sm mb-3">I comandi essenziali per installare programmi su Ubuntu/Debian
+            (richiedono sudo).</p>
+          <div class="font-mono text-sm bg-gray-900 p-3 rounded border border-gray-700 text-gray-300">
+            <span class="text-gray-500"># Aggiorna il catalogo software</span><br>
+            <span class="text-cyan-400">$</span> sudo apt update<br>
+            <span class="text-gray-500"># Installa un programma</span><br>
+            <span class="text-cyan-400">$</span> sudo apt install htop
+          </div>
+        </div>
+
+        <div
+          class="bg-gray-800 rounded-xl p-5 border border-gray-700 md:col-span-2 flex flex-col md:flex-row gap-6 items-center">
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-blue-400 mb-2">Strumenti Web (wget e curl)</h3>
+            <p class="text-gray-400 text-sm mb-3">La riga di comando è il tuo browser. <code>wget</code> salva i file su
+              disco, <code>curl</code> solitamente stampa l'output a schermo.</p>
+          </div>
+          <div class="flex-1 w-full font-mono text-sm bg-gray-900 p-3 rounded border border-blue-900/50 text-gray-300">
+            <span class="text-gray-500"># Scarica un'immagine e la salva</span><br>
+            <span class="text-cyan-400">$</span> wget https://sito.com/logo.png<br>
+            <span class="text-gray-500"># Mostra il codice HTML di una pagina web</span><br>
+            <span class="text-cyan-400">$</span> curl localhost
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARTE 2: MISSIONI PRATICHE -->
+    <section class="animate-fade-in delay-200">
+      <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
+        <i data-lucide="target" class="w-6 h-6 text-cyan-400"></i>
+        <h2 class="text-2xl font-bold text-white">2. Missioni sul Terminale Reale</h2>
+      </div>
+      <p class="text-gray-400 mb-6">Usa il tuo terminale reale per interagire con la rete. Esegui in sequenza i seguenti
+        task.</p>
+
+      <div class="space-y-6">
+        <!-- Missione Alpha -->
+        <div class="relative pl-8 border-l-2 border-cyan-500">
+          <div class="absolute -left-[11px] top-0 bg-gray-900 p-1">
+            <div class="w-4 h-4 rounded-full bg-cyan-500"></div>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Missione Alpha: Esplorazione Rete</h3>
+          <ul class="list-decimal list-inside text-gray-300 space-y-2 marker:text-cyan-500">
+            <li>Usa <code class="text-cyan-300 bg-gray-800 px-1 rounded">ip a</code> per individuare il tuo indirizzo IP
+              locale sulla rete eth0 o ens33.</li>
+            <li>Verifica se il server raggiunge internet lanciando <code
+                class="text-cyan-300 bg-gray-800 px-1 rounded">ping -c 4 gnu.org</code> (Il flag -c 4 dice di inviare
+              solo 4 pacchetti e poi fermarsi).</li>
+            <li>Scarica la pagina principale di gnu.org usando il comando <code
+                class="text-cyan-300 bg-gray-800 px-1 rounded">wget https://gnu.org</code>. Questo creerà un file
+              <code>index.html</code> nella tua cartella.
+            </li>
+            <li>Verifica l'esistenza del file con <code class="text-cyan-300 bg-gray-800 px-1 rounded">ls -l</code> e
+              controlla le sue dimensioni.</li>
+          </ul>
+        </div>
+
+        <!-- Missione Beta -->
+        <div class="relative pl-8 border-l-2 border-cyan-500">
+          <div class="absolute -left-[11px] top-0 bg-gray-900 p-1">
+            <div class="w-4 h-4 rounded-full bg-cyan-500"></div>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Missione Beta: Il Tuo Primo Web Server</h3>
+          <ul class="list-decimal list-inside text-gray-300 space-y-2 marker:text-cyan-500">
+            <li>Aggiorna sempre l'elenco dei repository prima di installare qualcosa: <code
+                class="text-cyan-300 bg-gray-800 px-1 rounded">sudo apt update</code></li>
+            <li>Installa il server web Nginx: <code
+                class="text-cyan-300 bg-gray-800 px-1 rounded">sudo apt install nginx</code>. Digita "Y" se chiede
+              conferma.</li>
+            <li>Il server dovrebbe avviarsi da solo. Chiedi al server di rispondere a te stesso (localhost) usando <code
+                class="text-cyan-300 bg-gray-800 px-1 rounded">curl localhost</code>.</li>
+            <li>Se vedi a schermo il codice sorgente HTML con scritto "Welcome to nginx!", congratulazioni, hai appena
+              ospitato il tuo primo sito web da terminale!</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARTE 3: QUIZ INTERATTIVO -->
+    <section class="animate-fade-in delay-200">
+      <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
+        <i data-lucide="check-square" class="w-6 h-6 text-green-400"></i>
+        <h2 class="text-2xl font-bold text-white">3. Quiz di Verifica: APT e Rete</h2>
+      </div>
+
+      <div id="quiz-container" class="bg-gray-950 border border-gray-700 rounded-xl p-6 md:p-8 shadow-lg">
+        <div id="questions-wrapper"></div>
+
+        <div class="mt-8 flex justify-between items-center border-t border-gray-800 pt-6">
+          <div id="quiz-feedback" class="text-lg font-bold hidden"></div>
+          <button id="submit-quiz" onclick="checkQuiz()"
+            class="bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 ml-auto">
+            <i data-lucide="send" class="w-5 h-5"></i> Valuta Risposte
+          </button>
+          <button id="retry-quiz" onclick="resetQuiz()"
+            class="hidden bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors ml-auto">
+            Riprova
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-gray-800 py-8 bg-gray-900 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm font-mono">
+      root@its-lab:~# end_module_6
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    const quizData = [
+      {
+        question: "1. Qual è la differenza fondamentale tra 'sudo apt update' e 'sudo apt upgrade'?",
+        options: [
+          "Sono esattamente la stessa cosa.",
+          "'update' aggiorna solo il catalogo/lista, 'upgrade' scarica e installa fisicamente i nuovi file.",
+          "'update' aggiorna il sistema operativo, 'upgrade' aggiorna solo le app.",
+          "'update' installa i file, 'upgrade' li rimuove."
+        ],
+        correct: 1,
+        explanation: "<strong>update</strong> chiede ai server online se ci sono novità per aggiornare l'elenco interno. <strong>upgrade</strong> esegue materialmente il download e l'aggiornamento dei pacchetti sul tuo disco."
+      },
+      {
+        question: "2. Quale comando si usa nelle moderne distribuzioni Linux per visualizzare l'indirizzo IP del tuo server?",
+        options: ["ip a", "ifconfig", "ping -ip", "netstat"],
+        correct: 0,
+        explanation: "<strong>ip a</strong> (abbreviazione di 'ip address') sostituisce il vecchio 'ifconfig' diventato ormai obsoleto su molte distribuzioni moderne."
+      },
+      {
+        question: "3. Vuoi scaricare una grossa immagine ISO da un sito e salvarla direttamente nel terminale. Quale comando usi?",
+        options: ["curl", "apt install", "wget", "ping"],
+        correct: 2,
+        explanation: "<strong>wget</strong> (Web Get) nasce proprio per scaricare file in modalità silenziosa o con barra di progresso e salvarli direttamente su disco."
+      },
+      {
+        question: "4. Hai avviato un web server. Come puoi testare subito dalla CLI se ti risponde (vedendo l'HTML)?",
+        options: ["ping localhost", "curl localhost", "ip a localhost", "wget www.google.com"],
+        correct: 1,
+        explanation: "<strong>curl localhost</strong> è lo standard per fare una richiesta HTTP fittizia al proprio server e leggere la risposta del codice HTML a terminale."
+      },
+      {
+        question: "5. Cosa stai facendo se digiti 'ping 8.8.8.8'?",
+        options: [
+          "Scarico il file chiamato 8.8.8.8.",
+          "Installo il programma 8.8.8.8.",
+          "Invio pacchetti ICMP per testare la latenza e se raggiungo i server DNS di Google.",
+          "Apro la porta numero 8 del firewall."
+        ],
+        correct: 2,
+        explanation: "Il <strong>ping</strong> invia piccoli \"bip\" (echo request) a un indirizzo e aspetta la risposta per calcolare se c'è connettività e quanto è veloce."
+      }
+    ];
+
+    let userAnswers = new Array(quizData.length).fill(null);
+
+    function renderQuiz() {
+      const wrapper = document.getElementById('questions-wrapper');
+      wrapper.innerHTML = '';
+
+      quizData.forEach((q, qIndex) => {
+        const qBlock = document.createElement('div');
+        qBlock.className = 'mb-8 last:mb-0';
+
+        const qTitle = document.createElement('h3');
+        qTitle.className = 'text-xl font-bold text-white mb-4';
+        qTitle.textContent = q.question;
+        qBlock.appendChild(qTitle);
+
+        const optionsGrid = document.createElement('div');
+        optionsGrid.className = 'space-y-2';
+
+        q.options.forEach((opt, oIndex) => {
+          const optDiv = document.createElement('div');
+          optDiv.className = 'quiz-option';
+          optDiv.id = `q${qIndex}-o${oIndex}`;
+
+          optDiv.innerHTML = `
+                        <div class="w-5 h-5 rounded-full border-2 border-gray-500 mr-4 flex items-center justify-center indicator">
+                            <div class="w-2.5 h-2.5 rounded-full bg-cyan-500 hidden inner-dot"></div>
+                        </div>
+                        <span class="text-gray-200">${opt}</span>
+                    `;
+
+          optDiv.onclick = () => selectOption(qIndex, oIndex);
+          optionsGrid.appendChild(optDiv);
+        });
+
+        qBlock.appendChild(optionsGrid);
+
+        const expDiv = document.createElement('div');
+        expDiv.id = `exp-${qIndex}`;
+        expDiv.className = 'hidden mt-3 p-4 rounded-lg bg-gray-800 border border-gray-700 text-gray-300 text-sm';
+        expDiv.innerHTML = `<i data-lucide="info" class="w-4 h-4 inline mr-2 text-cyan-400"></i>${q.explanation}`;
+        qBlock.appendChild(expDiv);
+
+        wrapper.appendChild(qBlock);
+      });
+      lucide.createIcons();
+    }
+
+    function selectOption(qIndex, oIndex) {
+      if (document.getElementById('submit-quiz').classList.contains('hidden')) return;
+
+      userAnswers[qIndex] = oIndex;
+
+      for (let i = 0; i < quizData[qIndex].options.length; i++) {
+        const el = document.getElementById(`q${qIndex}-o${i}`);
+        el.classList.remove('selected');
+        el.querySelector('.inner-dot').classList.add('hidden');
+        el.querySelector('.indicator').classList.remove('border-cyan-500');
+      }
+
+      const selectedEl = document.getElementById(`q${qIndex}-o${oIndex}`);
+      selectedEl.classList.add('selected');
+      selectedEl.querySelector('.inner-dot').classList.remove('hidden');
+      selectedEl.querySelector('.indicator').classList.add('border-cyan-500');
+    }
+
+    function checkQuiz() {
+      if (userAnswers.includes(null)) {
+        const feedback = document.getElementById('quiz-feedback');
+        feedback.innerHTML = '<span class="text-yellow-500"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Rispondi a tutte le domande prima di confermare.</span>';
+        feedback.classList.remove('hidden');
+        setTimeout(() => feedback.classList.add('hidden'), 3000);
+        return;
+      }
+
+      let score = 0;
+
+      quizData.forEach((q, qIndex) => {
+        const selectedOpt = userAnswers[qIndex];
+        const correctOpt = q.correct;
+
+        document.getElementById(`exp-${qIndex}`).classList.remove('hidden');
+
+        if (selectedOpt === correctOpt) {
+          score++;
+          document.getElementById(`q${qIndex}-o${selectedOpt}`).classList.add('correct');
+          document.getElementById(`q${qIndex}-o${selectedOpt}`).classList.remove('selected');
+        } else {
+          document.getElementById(`q${qIndex}-o${selectedOpt}`).classList.add('wrong');
+          document.getElementById(`q${qIndex}-o${correctOpt}`).classList.add('correct');
+        }
+      });
+
+      document.getElementById('submit-quiz').classList.add('hidden');
+      document.getElementById('retry-quiz').classList.remove('hidden');
+
+      const feedback = document.getElementById('quiz-feedback');
+      feedback.classList.remove('hidden');
+
+      if (score === quizData.length) {
+        feedback.innerHTML = `<span class="text-green-500">Ottimo! Punteggio: ${score}/${quizData.length}. Sei ufficialmente online.</span>`;
+      } else if (score >= quizData.length / 2) {
+        feedback.innerHTML = `<span class="text-yellow-500">Buono! Punteggio: ${score}/${quizData.length}. Ricorda la differenza tra update e upgrade.</span>`;
+      } else {
+        feedback.innerHTML = `<span class="text-red-500">Punteggio: ${score}/${quizData.length}. Qualcosa è andato storto nella connessione. Rileggi la guida.</span>`;
+      }
+    }
+
+    function resetQuiz() {
+      userAnswers = new Array(quizData.length).fill(null);
+      document.getElementById('submit-quiz').classList.remove('hidden');
+      document.getElementById('retry-quiz').classList.add('hidden');
+      document.getElementById('quiz-feedback').classList.add('hidden');
+      renderQuiz();
+    }
+
+    renderQuiz();
+  </script>
+</body>
+
+</html>

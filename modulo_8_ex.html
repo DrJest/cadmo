@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laboratorio Modulo 4 - ITS LinuxLab</title>
+  <title>Laboratorio Modulo 8 - ITS LinuxLab</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -44,12 +44,12 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #4B5563;
+      background: #374151;
       border-radius: 4px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: #9CA3AF;
+      background: #4B5563;
     }
 
     /* Stili per il Quiz */
@@ -58,7 +58,7 @@
     }
 
     .quiz-option.selected {
-      @apply border-yellow-500 bg-yellow-900/20 ring-1 ring-yellow-500;
+      @apply border-emerald-500 bg-emerald-900/20 ring-1 ring-emerald-500;
     }
 
     .quiz-option.correct {
@@ -71,7 +71,7 @@
   </style>
 </head>
 
-<body class="min-h-screen bg-gray-900 text-gray-100 font-sans selection:bg-yellow-500 selection:text-white">
+<body class="min-h-screen bg-gray-900 text-gray-100 font-sans selection:bg-emerald-500 selection:text-white">
 
   <!-- Navbar -->
   <nav class="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
@@ -82,7 +82,6 @@
           <span class="font-bold text-xl tracking-tight">ITS <span class="text-green-500">LinuxLab</span></span>
         </div>
         <div class="flex items-center gap-4">
-          <!-- Modificato come richiesto per puntare alla root -->
           <a href="./" class="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-2">
             <i data-lucide="arrow-left" class="w-4 h-4"></i> Torna alla Home
           </a>
@@ -95,12 +94,12 @@
   <header class="bg-gray-950 border-b border-gray-800 py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
       <div
-        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-900/30 border border-yellow-500/30 text-xs text-yellow-400 font-mono mb-4 uppercase tracking-wider">
-        <i data-lucide="git-merge" class="w-4 h-4"></i> Data Pipeline
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/30 border border-emerald-500/30 text-xs text-emerald-400 font-mono mb-4 uppercase tracking-wider">
+        <i data-lucide="cpu" class="w-4 h-4"></i> Automazione
       </div>
-      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Esercitazioni Modulo 4</h1>
-      <p class="text-gray-400 text-lg">Guida di riferimento ai filtri, missioni pratiche sul terminale e quiz sulle
-        redirezioni dei flussi.</p>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Esercitazioni Modulo 8</h1>
+      <p class="text-gray-400 text-lg">Basi di Shell Scripting, variabili, costrutti condizionali e pianificazione dei
+        task con Cron.</p>
     </div>
   </header>
 
@@ -109,46 +108,49 @@
     <!-- PARTE 1: GUIDA SCENARI -->
     <section class="animate-fade-in delay-100">
       <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
-        <i data-lucide="book-open" class="w-6 h-6 text-yellow-400"></i>
-        <h2 class="text-2xl font-bold text-white">1. Guida Rapida: Flussi e Filtri</h2>
+        <i data-lucide="book-open" class="w-6 h-6 text-emerald-400"></i>
+        <h2 class="text-2xl font-bold text-white">1. Guida Rapida: Scripting</h2>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="bg-gray-800 rounded-xl p-5 border border-gray-700">
-          <h3 class="text-lg font-bold text-yellow-400 mb-2">Redirezione: Salvare l'Output</h3>
-          <p class="text-gray-400 text-sm mb-3">Salva il risultato di un comando in un file invece di stamparlo a
-            schermo.</p>
+          <h3 class="text-lg font-bold text-emerald-400 mb-2">Basi e Variabili</h3>
+          <p class="text-gray-400 text-sm mb-3">Ricorda sempre lo Shebang all'inizio e non mettere spazi attorno
+            all'uguale (=).</p>
           <div class="font-mono text-sm bg-gray-900 p-3 rounded border border-gray-700 text-gray-300">
-            <span class="text-gray-500"># > Sovrascrive il file</span><br>
-            <span class="text-yellow-400">$</span> echo "Report" > file.txt<br>
-            <span class="text-gray-500"># >> Aggiunge alla fine (Append)</span><br>
-            <span class="text-yellow-400">$</span> echo "Fine" >> file.txt
+            <span class="text-gray-500">#!/bin/bash</span><br>
+            <span class="text-emerald-400">NOME</span>="ITS Linux"<br>
+            echo "Benvenuti in <span class="text-emerald-400">$NOME</span>"
           </div>
         </div>
 
         <div class="bg-gray-800 rounded-xl p-5 border border-gray-700">
-          <h3 class="text-lg font-bold text-cyan-400 mb-2">Grep: Trovare un ago nel pagliaio</h3>
-          <p class="text-gray-400 text-sm mb-3">Filtra enormi quantità di testo tenendo solo le righe che contengono la
-            parola chiave.</p>
+          <h3 class="text-lg font-bold text-blue-400 mb-2">Costrutto IF</h3>
+          <p class="text-gray-400 text-sm mb-3">Prendi decisioni in base all'esistenza di un file o al valore di una
+            variabile.</p>
           <div class="font-mono text-sm bg-gray-900 p-3 rounded border border-gray-700 text-gray-300">
-            <span class="text-gray-500"># Cerca 'error' nel file syslog</span><br>
-            <span class="text-yellow-400">$</span> grep "error" /var/log/syslog<br>
-            <span class="text-gray-500"># Ignora maiuscole/minuscole (-i)</span><br>
-            <span class="text-yellow-400">$</span> grep -i "WARNING" log.txt
+            <span class="text-emerald-400">if</span> [ -f file.txt ]; <span class="text-emerald-400">then</span><br>
+            &nbsp;&nbsp;echo "Il file esiste"<br>
+            <span class="text-emerald-400">else</span><br>
+            &nbsp;&nbsp;echo "Non trovato"<br>
+            <span class="text-emerald-400">fi</span>
           </div>
         </div>
 
         <div
           class="bg-gray-800 rounded-xl p-5 border border-gray-700 md:col-span-2 flex flex-col md:flex-row gap-6 items-center">
           <div class="flex-1">
-            <h3 class="text-lg font-bold text-yellow-400 mb-2">La Pipeline (|)</h3>
-            <p class="text-gray-400 text-sm mb-3">Passa l'output del primo comando come input del secondo comando. Puoi
-              concatenare all'infinito!</p>
+            <h3 class="text-lg font-bold text-yellow-400 mb-2">Ciclo FOR e Argomenti</h3>
+            <p class="text-gray-400 text-sm mb-3">Ripeti operazioni o leggi i dati passati allo script al momento del
+              lancio (<code class="bg-gray-900 px-1 rounded">$1</code>).</p>
           </div>
           <div
             class="flex-1 w-full font-mono text-sm bg-gray-900 p-3 rounded border border-yellow-900/50 text-gray-300">
-            <span class="text-gray-500"># Elenca file -> Filtra solo i .conf -> Conta quante righe sono</span><br>
-            <span class="text-yellow-400">$</span> ls -la /etc | grep ".conf" | wc -l
+            <span class="text-gray-500"># Avvio: ./script.sh txt</span><br>
+            <span class="text-emerald-400">for</span> file <span class="text-emerald-400">in</span> *.$1; <span
+              class="text-emerald-400">do</span><br>
+            &nbsp;&nbsp;echo "Trovato: $file"<br>
+            <span class="text-emerald-400">done</span>
           </div>
         </div>
       </div>
@@ -157,52 +159,49 @@
     <!-- PARTE 2: MISSIONI PRATICHE -->
     <section class="animate-fade-in delay-200">
       <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
-        <i data-lucide="target" class="w-6 h-6 text-red-400"></i>
+        <i data-lucide="target" class="w-6 h-6 text-emerald-400"></i>
         <h2 class="text-2xl font-bold text-white">2. Missioni sul Terminale Reale</h2>
       </div>
-      <p class="text-gray-400 mb-6">Apri il tuo terminale e componi le pipeline. Se rimani bloccato, rileggi la guida
-        qui sopra!</p>
+      <p class="text-gray-400 mb-6">Usa l'editor <code>nano</code> (es. <code
+          class="bg-gray-800 px-1 rounded">nano backup.sh</code>) per scrivere il codice, salvalo con <kbd
+          class="bg-gray-800 px-1 rounded text-xs">Ctrl+O</kbd> ed esci con <kbd
+          class="bg-gray-800 px-1 rounded text-xs">Ctrl+X</kbd>.</p>
 
       <div class="space-y-6">
-        <!-- Missione A -->
-        <div class="relative pl-8 border-l-2 border-yellow-500">
+        <!-- Missione Alpha -->
+        <div class="relative pl-8 border-l-2 border-emerald-500">
           <div class="absolute -left-[11px] top-0 bg-gray-900 p-1">
-            <div class="w-4 h-4 rounded-full bg-yellow-500"></div>
+            <div class="w-4 h-4 rounded-full bg-emerald-500"></div>
           </div>
-          <h3 class="text-xl font-bold text-white mb-2">Missione Alpha: Il Segugio di Log</h3>
-          <ul class="list-decimal list-inside text-gray-300 space-y-2 marker:text-yellow-500">
-            <li>Spostati nella directory dei log di sistema: <code
-                class="text-yellow-300 bg-gray-800 px-1 rounded">cd /var/log</code></li>
-            <li>Elenca tutti i file presenti. Troverai un file chiamato <code
-                class="text-yellow-300 bg-gray-800 px-1 rounded">auth.log</code>, <code
-                class="text-yellow-300 bg-gray-800 px-1 rounded">syslog</code> o simile (scegline uno che contiene
-              testo).</li>
-            <li>Usa il comando <code class="text-yellow-300 bg-gray-800 px-1 rounded">cat</code> insieme al pipe <code
-                class="text-yellow-300 bg-gray-800 px-1 rounded">|</code> e a <code
-                class="text-yellow-300 bg-gray-800 px-1 rounded">grep</code> per trovare tutte le righe che contengono
-              la parola <code class="text-yellow-300 bg-gray-800 px-1 rounded">root</code>.</li>
-            <li><em>Evoluzione:</em> Aggiungi un secondo pipe con <code
-                class="text-yellow-300 bg-gray-800 px-1 rounded">wc -l</code> per <strong>contare</strong> quante sono
-              quelle righe, invece di stamparle a video.</li>
+          <h3 class="text-xl font-bold text-white mb-2">Missione Alpha: L'Apprendista</h3>
+          <ul class="list-decimal list-inside text-gray-300 space-y-2 marker:text-emerald-500">
+            <li>Crea un file chiamato <code class="text-emerald-300 bg-gray-800 px-1 rounded">saluto.sh</code>.</li>
+            <li>Scrivi all'interno lo shebang <code
+                class="text-emerald-300 bg-gray-800 px-1 rounded">#!/bin/bash</code>.</li>
+            <li>Chiedi il nome all'utente usando <code
+                class="text-emerald-300 bg-gray-800 px-1 rounded">read NOME</code>.</li>
+            <li>Stampa a video "Benvenuto nel server, $NOME!".</li>
+            <li>Salva il file, rendilo eseguibile (<code
+                class="text-emerald-300 bg-gray-800 px-1 rounded">chmod +x</code>) e lancialo con <code
+                class="text-emerald-300 bg-gray-800 px-1 rounded">./saluto.sh</code>.</li>
           </ul>
         </div>
 
-        <!-- Missione B -->
-        <div class="relative pl-8 border-l-2 border-yellow-500">
+        <!-- Missione Beta -->
+        <div class="relative pl-8 border-l-2 border-emerald-500">
           <div class="absolute -left-[11px] top-0 bg-gray-900 p-1">
-            <div class="w-4 h-4 rounded-full bg-yellow-500"></div>
+            <div class="w-4 h-4 rounded-full bg-emerald-500"></div>
           </div>
-          <h3 class="text-xl font-bold text-white mb-2">Missione Beta: Il Costruttore di Liste</h3>
-          <ul class="list-decimal list-inside text-gray-300 space-y-2 marker:text-yellow-500">
-            <li>Torna nella tua home directory.</li>
-            <li>Elenca il contenuto della directory <code class="text-yellow-300 bg-gray-800 px-1 rounded">/etc</code> e
-              devia l'output usando <code class="text-yellow-300 bg-gray-800 px-1 rounded">></code> in un file chiamato
-              <code class="text-yellow-300 bg-gray-800 px-1 rounded">lista_etc.txt</code>.</li>
-            <li>Aggiungi in coda a questo stesso file l'elenco della directory <code
-                class="text-yellow-300 bg-gray-800 px-1 rounded">/var</code> usando <code
-                class="text-yellow-300 bg-gray-800 px-1 rounded">>></code>.</li>
-            <li>Leggi il file <code class="text-yellow-300 bg-gray-800 px-1 rounded">lista_etc.txt</code> usando <code
-                class="text-yellow-300 bg-gray-800 px-1 rounded">less</code>. Premendo 'q' potrai uscire.</li>
+          <h3 class="text-xl font-bold text-white mb-2">Missione Beta: Il Costrutto Logico</h3>
+          <ul class="list-decimal list-inside text-gray-300 space-y-2 marker:text-emerald-500">
+            <li>Crea uno script <code class="text-emerald-300 bg-gray-800 px-1 rounded">verifica.sh</code>.</li>
+            <li>Usa un blocco <code
+                class="text-emerald-300 bg-gray-800 px-1 rounded">if [ -f /var/log/syslog ]; then</code> per controllare
+              se il log di sistema esiste.</li>
+            <li>Se esiste, fagli stampare "Log trovato!". Aggiungi <code
+                class="text-emerald-300 bg-gray-800 px-1 rounded">else</code> per stampare "Errore critico" in caso
+              contrario. Chiudi con <code class="text-emerald-300 bg-gray-800 px-1 rounded">fi</code>.</li>
+            <li>Rendilo eseguibile e testalo.</li>
           </ul>
         </div>
       </div>
@@ -212,7 +211,7 @@
     <section class="animate-fade-in delay-200">
       <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-2">
         <i data-lucide="check-square" class="w-6 h-6 text-green-400"></i>
-        <h2 class="text-2xl font-bold text-white">3. Quiz di Verifica: Pipeline</h2>
+        <h2 class="text-2xl font-bold text-white">3. Quiz di Verifica: Scripting & Cron</h2>
       </div>
 
       <div id="quiz-container" class="bg-gray-950 border border-gray-700 rounded-xl p-6 md:p-8 shadow-lg">
@@ -221,7 +220,7 @@
         <div class="mt-8 flex justify-between items-center border-t border-gray-800 pt-6">
           <div id="quiz-feedback" class="text-lg font-bold hidden"></div>
           <button id="submit-quiz" onclick="checkQuiz()"
-            class="bg-yellow-600 hover:bg-yellow-500 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 ml-auto">
+            class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 ml-auto">
             <i data-lucide="send" class="w-5 h-5"></i> Valuta Risposte
           </button>
           <button id="retry-quiz" onclick="resetQuiz()"
@@ -237,7 +236,7 @@
   <!-- Footer -->
   <footer class="border-t border-gray-800 py-8 bg-gray-900 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm font-mono">
-      root@its-lab:~# end_module_4
+      root@its-lab:~# end_course --success
     </div>
   </footer>
 
@@ -247,59 +246,59 @@
 
     const quizData = [
       {
-        question: "1. Qual è la differenza principale tra la redirezione '>' e '>>'?",
+        question: "1. A cosa serve la riga '#!/bin/bash' all'inizio di uno script?",
         options: [
-          "'>' è per i file di testo, '>>' è per i file binari.",
-          "'>' sovrascrive il file eliminando il contenuto precedente, '>>' aggiunge il testo alla fine del file.",
-          "'>' salva i dati, '>>' li cancella.",
-          "Non c'è differenza, sono la stessa cosa scritta in modo diverso."
+          "È solo un commento per ricordarsi chi ha scritto il file.",
+          "Installa Bash se non è presente nel sistema.",
+          "Indica al sistema operativo quale interprete utilizzare per eseguire il file.",
+          "Attiva i privilegi di root."
         ],
-        correct: 1,
-        explanation: "Il singolo <strong>></strong> pialla completamente il file se esiste già. Il doppio <strong>>></strong> esegue un 'append', accodando l'output senza fare danni."
+        correct: 2,
+        explanation: "Questa riga si chiama <strong>Shebang</strong>. Dice al kernel di passare l'esecuzione del file all'interprete Bash posizionato in /bin/bash."
       },
       {
-        question: "2. Cosa fa esattamente il carattere Pipe ( | ) in Linux?",
+        question: "2. Come si dichiara e si assegna correttamente una variabile in Bash?",
         options: [
-          "Prende lo Standard Output (stdout) del comando a sinistra e lo passa come Standard Input (stdin) al comando a destra.",
-          "Sospende il primo comando e avvia il secondo.",
-          "Cancella il risultato del primo comando.",
-          "Aggiunge un commento al comando inserito."
+          "VAR = 'Test'",
+          "VAR='Test'",
+          "var VAR = 'Test'",
+          "$VAR = 'Test'"
+        ],
+        correct: 1,
+        explanation: "In Bash, quando si assegna un valore, <strong>non ci devono essere spazi</strong> né prima né dopo il segno uguale (=)."
+      },
+      {
+        question: "3. Se lanci uno script digitando './script.sh backup.tar', come leggi la parola 'backup.tar' dentro lo script?",
+        options: [
+          "Usando la variabile $1",
+          "Usando la variabile $ARG",
+          "Usando read INPUT",
+          "Usando $0"
         ],
         correct: 0,
-        explanation: "Il <strong>Pipe</strong> funziona letteralmente come un tubo idraulico: collega l'uscita di un processo direttamente all'ingresso di un altro."
+        explanation: "Bash assegna automaticamente gli argomenti passati da riga di comando a variabili numeriche: <strong>$1</strong> è il primo argomento, $2 il secondo e così via ($0 è il nome dello script stesso)."
       },
       {
-        question: "3. Se voglio cercare la parola 'failed' all'interno del file auth.log, quale comando devo usare?",
+        question: "4. Qual è la sintassi obbligatoria per chiudere un blocco 'if' in Bash?",
         options: [
-          "find 'failed' auth.log",
-          "search auth.log failed",
-          "grep 'failed' auth.log",
-          "cat auth.log > failed"
+          "end if",
+          "}",
+          "fi",
+          "done"
         ],
         correct: 2,
-        explanation: "<strong>grep</strong> è il comando di filtraggio per eccellenza per trovare pattern di testo all'interno di uno o più file."
+        explanation: "In Bash, il blocco condizionale if si chiude scrivendo la stessa parola al contrario: <strong>fi</strong>."
       },
       {
-        question: "4. Cosa calcola il comando 'wc -l' (Word Count con flag -l)?",
+        question: "5. Se nel file crontab (cron) inserisci la regola '0 2 * * * /backup.sh', quando verrà eseguito lo script?",
         options: [
-          "Il numero di caratteri (lettere).",
-          "Il peso del file in Megabyte.",
-          "Il numero di righe (lines).",
-          "Il numero totale di file in una directory."
+          "Ogni 2 ore.",
+          "Alle 00:02 di ogni giorno.",
+          "Alle 02:00 di notte di ogni giorno.",
+          "Il giorno 2 di ogni mese a mezzanotte."
         ],
         correct: 2,
-        explanation: "Il flag <strong>-l</strong> sta per 'lines'. Inserito alla fine di una pipeline, è utilissimo per sapere *quanti* risultati abbiamo ottenuto."
-      },
-      {
-        question: "5. Se digiti 'find / -name \"*.conf\"', cosa stai chiedendo al sistema?",
-        options: [
-          "Cerca nella cartella corrente tutti i file che finiscono in .conf.",
-          "Cerca in TUTTO il sistema (dalla root / in giù) tutti i file che terminano con .conf.",
-          "Cancella tutti i file .conf dal sistema.",
-          "Trova un file esatto che si chiama '*.conf'."
-        ],
-        correct: 1,
-        explanation: "Specificare <strong>/</strong> dice a find di cercare a partire dalla radice assoluta del sistema. L'asterisco (*) agisce da wildcard (carattere jolly) prima dell'estensione."
+        explanation: "Il formato di cron è: Minuto Ora Giorno Mese Giorno_Settimana. <strong>0 2</strong> significa esattamente 'Al minuto 0 dell'ora 2' (le due di notte)."
       }
     ];
 
@@ -328,7 +327,7 @@
 
           optDiv.innerHTML = `
                         <div class="w-5 h-5 rounded-full border-2 border-gray-500 mr-4 flex items-center justify-center indicator">
-                            <div class="w-2.5 h-2.5 rounded-full bg-yellow-500 hidden inner-dot"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 hidden inner-dot"></div>
                         </div>
                         <span class="text-gray-200">${opt}</span>
                     `;
@@ -342,7 +341,7 @@
         const expDiv = document.createElement('div');
         expDiv.id = `exp-${qIndex}`;
         expDiv.className = 'hidden mt-3 p-4 rounded-lg bg-gray-800 border border-gray-700 text-gray-300 text-sm';
-        expDiv.innerHTML = `<i data-lucide="info" class="w-4 h-4 inline mr-2 text-yellow-400"></i>${q.explanation}`;
+        expDiv.innerHTML = `<i data-lucide="info" class="w-4 h-4 inline mr-2 text-emerald-400"></i>${q.explanation}`;
         qBlock.appendChild(expDiv);
 
         wrapper.appendChild(qBlock);
@@ -359,19 +358,19 @@
         const el = document.getElementById(`q${qIndex}-o${i}`);
         el.classList.remove('selected');
         el.querySelector('.inner-dot').classList.add('hidden');
-        el.querySelector('.indicator').classList.remove('border-yellow-500');
+        el.querySelector('.indicator').classList.remove('border-emerald-500');
       }
 
       const selectedEl = document.getElementById(`q${qIndex}-o${oIndex}`);
       selectedEl.classList.add('selected');
       selectedEl.querySelector('.inner-dot').classList.remove('hidden');
-      selectedEl.querySelector('.indicator').classList.add('border-yellow-500');
+      selectedEl.querySelector('.indicator').classList.add('border-emerald-500');
     }
 
     function checkQuiz() {
       if (userAnswers.includes(null)) {
         const feedback = document.getElementById('quiz-feedback');
-        feedback.innerHTML = '<span class="text-yellow-500"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Rispondi a tutte le domande per la pipeline di valutazione!</span>';
+        feedback.innerHTML = '<span class="text-yellow-500"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Rispondi a tutte le domande per compilare lo script!</span>';
         feedback.classList.remove('hidden');
         setTimeout(() => feedback.classList.add('hidden'), 3000);
         return;
@@ -402,11 +401,11 @@
       feedback.classList.remove('hidden');
 
       if (score === quizData.length) {
-        feedback.innerHTML = `<span class="text-green-500">Perfetto! Punteggio: ${score}/${quizData.length}. Padronanza totale della pipeline.</span>`;
+        feedback.innerHTML = `<span class="text-green-500">Eccellente! Punteggio: ${score}/${quizData.length}. Sei un Sysadmin fatto e finito!</span>`;
       } else if (score >= quizData.length / 2) {
-        feedback.innerHTML = `<span class="text-yellow-500">Buono! Punteggio: ${score}/${quizData.length}. C'è qualche falla nei tubi, ma te la cavi.</span>`;
+        feedback.innerHTML = `<span class="text-yellow-500">Buono! Punteggio: ${score}/${quizData.length}. Rivedi la sintassi di bash.</span>`;
       } else {
-        feedback.innerHTML = `<span class="text-red-500">Punteggio: ${score}/${quizData.length}. La tua pipeline fa acqua, ti consiglio di ripassare!</span>`;
+        feedback.innerHTML = `<span class="text-red-500">Punteggio: ${score}/${quizData.length}. Lo scripting richiede pratica, non demordere!</span>`;
       }
     }
 
