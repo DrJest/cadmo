@@ -1,0 +1,242 @@
+============================================================
+COMPITO FINALE - CORSO LINUX ITS
+Moduli 1-7 | Durata: 60 minuti | Punti totali: 30
+============================================================-
+
+============================================================
+SEZIONE A - DOMANDE A RISPOSTA MULTIPLA (10 domande, 1 punto ciascuna)
+Seleziona UNA sola risposta corretta per ogni domanda.
+============================================================
+
+DOMANDA 1 (Modulo 1)
+Quale percentuale dei server mondiali (AWS, Google Cloud, Azure) utilizza Linux?
+
+A) Circa il 50%
+B) Circa il 70%
+C) Oltre il 90%
+D) Il 100%
+
+Risposta corretta: C
+
+
+DOMANDA 2 (Modulo 1)
+In un sistema Linux, qual e' la differenza tra Kernel e Userland?
+
+A) Il Kernel e' l'interfaccia grafica, la Userland gestisce l'hardware
+B) Il Kernel gestisce direttamente l'hardware e la memoria, la Userland e' lo spazio dove girano i programmi utente
+C) Non c'e' differenza, sono sinonimi
+D) Il Kernel e' installato dall'utente, la Userland viene preinstallata
+
+Risposta corretta: B
+
+
+DOMANDA 3 (Modulo 2)
+Quale comando mostra il percorso assoluto della directory in cui ci si trova?
+
+A) ls
+B) cd
+C) pwd
+D) whoami
+
+Risposta corretta: C
+
+
+DOMANDA 4 (Modulo 2)
+Cosa fa il comando "rm -r cartella"?
+
+A) Rinomina la cartella
+B) Crea una copia ricorsiva della cartella
+C) Elimina la cartella e tutto il suo contenuto in modo permanente
+D) Sposta la cartella nel cestino
+
+Risposta corretta: C
+
+
+DOMANDA 5 (Modulo 3)
+Nella notazione ottale dei permessi, cosa significa il numero 755?
+
+A) Utente: lettura+scrittura, Gruppo: lettura, Altri: nessun permesso
+B) Utente: tutti i permessi, Gruppo: lettura+esecuzione, Altri: lettura+esecuzione
+C) Tutti gli utenti hanno tutti i permessi
+D) Utente: lettura+esecuzione, Gruppo: scrittura, Altri: lettura
+
+Risposta corretta: B
+
+
+DOMANDA 6 (Modulo 3)
+Qual e' la differenza tra i comandi "su" e "sudo"?
+
+A) Sono sinonimi e fanno la stessa cosa
+B) "su" cambia utente (es. diventa root), "sudo" esegue un singolo comando con privilegi elevati
+C) "su" serve per installare software, "sudo" per disinstallarlo
+D) "su" funziona solo da remoto, "sudo" solo in locale
+
+Risposta corretta: B
+
+
+DOMANDA 7 (Modulo 4)
+Cosa fa l'operatore ">>" in una redirezione?
+
+A) Sovrascrive il contenuto del file di destinazione
+B) Aggiunge il testo in coda al file senza cancellare il contenuto esistente
+C) Crea un collegamento simbolico
+D) Redirige lo standard error
+
+Risposta corretta: B
+
+
+DOMANDA 8 (Modulo 5)
+Per terminare forzatamente un processo che non risponde al segnale standard, quale comando si usa?
+
+A) kill PID
+B) kill -9 PID
+C) killall -soft PID
+D) stop PID
+
+Risposta corretta: B
+
+
+DOMANDA 9 (Modulo 6)
+Qual e' la sequenza corretta per aggiornare e installare un pacchetto con APT?
+
+A) sudo apt install pacchetto -> sudo apt update
+B) apt install pacchetto (senza sudo)
+C) sudo apt update -> sudo apt install pacchetto
+D) sudo apt upgrade -> sudo apt install pacchetto
+
+Risposta corretta: C
+
+
+DOMANDA 10 (Modulo 7)
+Quale flag del comando tar attiva la compressione gzip?
+
+A) -v
+B) -c
+C) -z
+D) -f
+
+Risposta corretta: C
+
+
+============================================================
+SEZIONE B - DOMANDE A RISPOSTA BREVE (5 domande, 2 punti ciascuna)
+Rispondi in modo conciso (2-4 righe al massimo).
+============================================================
+
+DOMANDA 11 (Modulo 2)
+Spiega la differenza tra un percorso assoluto e un percorso relativo nel file system Linux. Fai un esempio per ciascuno.
+
+Risposta attesa:
+Il percorso assoluto parte sempre dalla radice "/" ed e' univoco (es. /home/studente/file.txt). Il percorso relativo parte dalla posizione corrente e usa "." (directory corrente) e ".." (directory superiore) come riferimenti (es. ../file.txt).
+
+
+DOMANDA 12 (Modulo 4)
+Spiega cosa fa il seguente comando e descrivi il ruolo di ogni componente:
+ps aux | grep nginx | wc -l
+
+Risposta attesa:
+"ps aux" elenca tutti i processi di tutti gli utenti. Il primo pipe (|) passa l'output a "grep nginx" che filtra solo le righe contenenti "nginx". Il secondo pipe passa il risultato a "wc -l" che conta il numero di righe, restituendo quanti processi nginx sono attivi.
+
+
+DOMANDA 13 (Modulo 5)
+Qual e' la differenza tra un processo in foreground e uno in background? Come si lancia un comando in background?
+
+Risposta attesa:
+Un processo in foreground blocca il terminale fino al completamento, impedendo l'inserimento di altri comandi. Un processo in background libera il terminale immediatamente. Per lanciare un comando in background si aggiunge il simbolo "&" alla fine (es. tar -czf backup.tar.gz /var &).
+
+
+DOMANDA 14 (Modulo 6)
+Qual e' la differenza tra wget e curl? In quale situazione useresti l'uno piuttosto che l'altro?
+
+Risposta attesa:
+wget scarica file e li salva su disco nella directory corrente; e' ideale per il download di file. curl stampa il contenuto direttamente a terminale (stdout); e' preferito dagli sviluppatori per testare API e verificare la risposta dei server (es. curl localhost per verificare che un web server risponda).
+
+
+DOMANDA 15 (Modulo 7)
+Cosa succede se si scollega un disco USB senza usare il comando umount? Perche' il comando mount richiede sudo?
+
+Risposta attesa:
+Scollegare un disco senza umount puo' causare corruzione dei dati perche' il sistema potrebbe avere operazioni di scrittura non completate. Il comando mount richiede sudo perche' collegare un dispositivo al file system e' un'operazione privilegiata che modifica la struttura del sistema e puo' influenzare la sicurezza.
+
+
+============================================================
+SEZIONE C - DOMANDE A RISPOSTA LUNGA (2 domande, 5 punti ciascuna)
+Rispondi in modo completo e strutturato (8-15 righe).
+============================================================
+
+DOMANDA 16 (Moduli 3 + 4)
+Scenario: Sei un sysadmin e devi configurare una cartella condivisa "/opt/progetto" per un team di sviluppo.
+
+a) Crea un gruppo chiamato "sviluppatori" e aggiungi l'utente "mario" al gruppo. Scrivi i comandi necessari.
+b) Imposta i permessi della cartella in modo che: il proprietario possa leggere, scrivere ed eseguire; il gruppo possa leggere ed eseguire; gli altri non abbiano alcun permesso. Usa la notazione ottale.
+c) Cambia il proprietario della cartella a root e il gruppo a "sviluppatori" con un solo comando.
+d) Scrivi un comando per verificare che i permessi e la proprieta' siano stati applicati correttamente.
+
+Risposta attesa:
+a) sudo groupadd sviluppatori
+   sudo usermod -aG sviluppatori mario
+
+b) sudo chmod 750 /opt/progetto
+   (7=rwx per User, 5=r-x per Group, 0=--- per Others)
+
+c) sudo chown root:sviluppatori /opt/progetto
+
+d) ls -l /opt/progetto  oppure  ls -ld /opt/progetto
+   (l'output atteso mostra: drwxr-x--- root sviluppatori)
+
+
+DOMANDA 17 (Moduli 5 + 6 + 7)
+Scenario: Devi fare manutenzione ordinaria su un server Linux.
+
+a) Scrivi il comando per controllare quanta RAM e' disponibile in formato leggibile e quello per vedere lo spazio libero sui dischi. Per ciascuno, spiega brevemente cosa mostra.
+b) Devi creare un backup compresso della cartella /var/log e salvarlo come logs_backup.tar.gz. Scrivi il comando e spiega il significato di ogni flag utilizzata.
+c) Una chiavetta USB e' stata inserita nel server ed e' riconosciuta come /dev/sdb1. Scrivi il comando per montarla nella cartella /mnt/usb e quello per smontarla in sicurezza.
+
+Risposta attesa:
+a) free -h mostra la RAM totale, usata e libera in formato leggibile (MB/GB).
+   df -h mostra lo spazio occupato e libero di tutti i dischi/partizioni montati.
+
+b) tar -czf logs_backup.tar.gz /var/log
+   -c = Create (crea l'archivio)
+   -z = comprime con gzip
+   -f = specifica il nome del file di output
+
+c) sudo mount /dev/sdb1 /mnt/usb   (monta la chiavetta nella cartella)
+   sudo umount /mnt/usb             (smonta in sicurezza prima di rimuoverla)
+
+
+============================================================
+GRIGLIA DI VALUTAZIONE RIEPILOGATIVA
+============================================================
+
+Sezione A (Risposta multipla):   10 domande x 1 punto = 10 punti
+Sezione B (Risposta breve):       5 domande x 2 punti = 10 punti
+Sezione C (Risposta lunga):       2 domande x 5 punti = 10 punti
+                                              TOTALE  = 30 punti
+
+Scala di valutazione suggerita:
+  28-30 punti:  Eccellente
+  24-27 punti:  Buono
+  18-23 punti:  Sufficiente
+  12-17 punti:  Insufficiente
+   0-11 punti:  Gravemente insufficiente
+
+
+============================================================
+NOTE PER L'IMPORTAZIONE IN GOOGLE CLASSROOM / FORMS
+============================================================
+
+SEZIONE A - Su Google Forms:
+  - Tipo domanda: "Scelta multipla"
+  - Attivare "Valutazione automatica" e impostare 1 punto per domanda
+  - Inserire la risposta corretta nel campo "Chiave di risposta"
+
+SEZIONE B - Su Google Forms:
+  - Tipo domanda: "Risposta breve" o "Paragrafo"
+  - Impostare 2 punti e correzione manuale
+  - Copiare la risposta attesa nel campo "Feedback per la risposta"
+
+SEZIONE C - Su Google Forms:
+  - Tipo domanda: "Paragrafo"
+  - Impostare 5 punti e correzione manuale
+  - Copiare la risposta attesa nel campo "Feedback per la risposta"
